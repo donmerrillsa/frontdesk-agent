@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start Your Free 14-Day Trial – Frontdesk</title>
+<meta name="description" content="Start your free 14-day Frontdesk trial. No setup fee, no commitment, live within 72 hours.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231857C9'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#ffffff; --paper-dim:#f5f7f9; --ink:#15191c; --slate:#5b6470; --hairline:#e3e6ea;
+    --cool:#1857c9; --cool-dark:#123f94; --heat:#cf5326;
+    --radius:6px; --measure:720px;
+    --font-display:'Big Shoulders','Arial Narrow',sans-serif;
+    --font-body:'Source Sans 3',system-ui,-apple-system,Segoe UI,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:17px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  h1,p{ margin:0; }
+  a{ color:inherit; text-decoration:none; }
+  *:focus-visible{ outline:3px solid var(--cool); outline-offset:2px; border-radius:3px; }
+
+  .wrap{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; }
+  .section{ padding-block:96px; }
+  @media (max-width:640px){ .section{ padding-block:56px; } }
+
+  .btn{ display:inline-block; font-family:var(--font-body); font-weight:700; font-size:1.05em; padding:16px 30px; border-radius:var(--radius); background:var(--cool); color:#fff; transition:background-color .15s ease; border:none; cursor:pointer; }
+  .btn:hover{ background:var(--cool-dark); }
+
+  .site-header{ position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--hairline); }
+  .site-header__inner{ max-width:var(--measure); margin-inline:auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .brand{ font-family:var(--font-display); font-weight:700; font-size:1.3em; letter-spacing:0.08em; }
+  .site-header__back{ font-size:0.95em; color:var(--slate); }
+  .site-header__back:hover{ color:var(--cool); }
+
+  .signup__inner{ text-align:center; }
+  .signup__inner h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.8em,4vw,2.2em); line-height:1.2; }
+  .signup__inner > p{ margin-top:16px; color:var(--slate); font-size:1.1em; }
+
+  .signup-form{ margin:48px auto 0; max-width:460px; text-align:left; }
+  .field{ display:block; margin-top:20px; }
+  .field span{ display:block; font-weight:600; margin-bottom:6px; font-size:0.95em; }
+  .field small{ font-weight:400; color:var(--slate); }
+  .field input{
+    width:100%; padding:12px 14px; border:1px solid var(--hairline); border-radius:var(--radius);
+    font-family:var(--font-body); font-size:1em; background:var(--paper); color:var(--ink);
+  }
+  .field input:focus{ outline:3px solid var(--cool); outline-offset:1px; border-color:var(--cool); }
+  .signup-form .btn{ margin-top:28px; width:100%; text-align:center; }
+  .signup-form__note{ margin-top:16px; color:var(--slate); font-size:0.9em; text-align:center; }
+  .signup-form__note a{ color:var(--cool); text-decoration:underline; }
+  .signup-form__note a:hover{ color:var(--cool-dark); }
+  .consent-check{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-top:28px;
+    font-size:0.9em;
+    color:var(--slate);
+    cursor:pointer;
+  }
+  .consent-check input{ margin-top:3px; flex-shrink:0; width:16px; height:16px; accent-color:var(--cool); }
+  .consent-check a{ color:var(--cool); text-decoration:underline; }
+  .consent-check a:hover{ color:var(--cool-dark); }
+  .hidden{ display:none; }
+
+  .site-footer{ background:var(--paper); border-top:1px solid var(--hairline); padding-block:32px; }
+  .site-footer__inner{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; justify-content:space-between; color:var(--slate); font-size:0.9em; }
+  .site-footer a:hover{ color:var(--cool); }
+  .footer-links{ display:flex; gap:16px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">FRONTDESK</a>
+    <a class="site-header__back" href="index.html">← Back to site</a>
+  </div>
+</header>
+
+<section class="section signup">
+  <div class="wrap signup__inner">
+    <h1>Start Your Free 14-Day Trial</h1>
+    <p>No setup fee. No commitment. We'll have your trial number live within 72 hours.</p>
+
+    <!-- Netlify-native form: no backend required. Submissions land in your
+         Netlify dashboard, and you can turn on email notifications under
+         Site settings → Forms → Form notifications. -->
+    <form name="trial-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/trial-thanks.html" class="signup-form">
+      <input type="hidden" name="form-name" value="trial-signup">
+      <input type="hidden" name="terms_version" value="2026-06-27">
+      <p class="hidden">
+        <label>Do not fill this out if you are human: <input name="bot-field"></label>
+      </p>
+
+      <label class="field">
+        <span>Business Name</span>
+        <input type="text" name="business_name" required autocomplete="organization">
+      </label>
+
+      <label class="field">
+        <span>Owner Name</span>
+        <input type="text" name="owner_name" required autocomplete="name">
+      </label>
+
+      <label class="field">
+        <span>Mobile Number <small>(for missed-call &amp; emergency alerts)</small></span>
+        <input type="tel" name="mobile_number" required autocomplete="tel">
+      </label>
+
+      <label class="field">
+        <span>Backup Number <small>(optional)</small></span>
+        <input type="tel" name="backup_number" autocomplete="tel">
+      </label>
+
+      <label class="field">
+        <span>Email</span>
+        <input type="email" name="email" required autocomplete="email">
+      </label>
+
+      <label class="consent-check">
+        <input type="checkbox" name="terms_accepted" required>
+        <span>I've read and agree to the <a href="terms.html" target="_blank">Terms and Conditions</a> (including the Limitation of Liability and Emergency Disclaimer) and <a href="privacy-policy.html" target="_blank">Privacy Policy</a>.</span>
+      </label>
+
+      <label class="consent-check">
+        <input type="checkbox" name="sample_reviewed" required>
+        <span>I've reviewed a <a href="sample-conversation.html" target="_blank">sample conversation</a> and understand how Frontdesk will communicate with my customers, including its limitations as described in the Terms and Conditions.</span>
+      </label>
+
+      <button type="submit" class="btn">Start My Free Trial</button>
+      <p class="signup-form__note">We will text and email you once your trial number is live.</p>
+      <p class="signup-form__note">By submitting, you agree to receive text messages from Frontdesk related to missed-call and emergency alerts, trial status, and account notifications. Message and data rates may apply. Reply STOP to opt out, HELP for help. See our <a href="privacy-policy.html">Privacy Policy</a> and <a href="terms.html">Terms</a>.</p>
+    </form>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span class="brand">FRONTDESK</span>
+    <a href="mailto:don@buy-mos.com">don@buy-mos.com</a>
+    <div class="footer-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <span>© 2026 Frontdesk. Built for HVAC.</span>
+  </div>
+</footer>
+
+</body>
+</html>

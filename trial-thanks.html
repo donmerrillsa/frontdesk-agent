@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're All Set – Frontdesk</title>
+<meta name="description" content="Your Frontdesk trial request has been received.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231857C9'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#ffffff; --ink:#15191c; --slate:#5b6470; --hairline:#e3e6ea;
+    --cool:#1857c9; --cool-dark:#123f94;
+    --radius:6px; --measure:720px;
+    --font-display:'Big Shoulders','Arial Narrow',sans-serif;
+    --font-body:'Source Sans 3',system-ui,-apple-system,Segoe UI,sans-serif;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:17px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  h1,p{ margin:0; }
+  a{ color:inherit; text-decoration:none; }
+  *:focus-visible{ outline:3px solid var(--cool); outline-offset:2px; border-radius:3px; }
+
+  .wrap{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; }
+  .section{ padding-block:120px; text-align:center; }
+  @media (max-width:640px){ .section{ padding-block:80px; } }
+
+  .btn{ display:inline-block; font-family:var(--font-body); font-weight:700; font-size:1.05em; padding:16px 30px; border-radius:var(--radius); background:var(--cool); color:#fff; transition:background-color .15s ease; margin-top:32px; }
+  .btn:hover{ background:var(--cool-dark); }
+
+  h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.8em,4vw,2.2em); }
+  .thanks__lead{ margin-top:18px; color:var(--slate); font-size:1.1em; }
+  .thanks__note{ margin-top:12px; color:var(--slate); }
+  .thanks__email{ margin-top:20px; }
+  .thanks__email a{ color:var(--cool); font-weight:600; }
+  .thanks__email a:hover{ color:var(--cool-dark); text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<section class="section">
+  <div class="wrap">
+    <h1>You're All Set</h1>
+    <p class="thanks__lead">Thanks — we've got your details. Your trial number will be live and texting back missed calls within 72 hours.</p>
+    <p class="thanks__note">We'll reach out by phone or email within 24 hours to confirm a few details and get everything set up on our end.</p>
+    <p class="thanks__note">Questions in the meantime? Reach out any time.</p>
+    <p class="thanks__email"><a href="mailto:don@buy-mos.com">don@buy-mos.com</a></p>
+    <div><a class="btn" href="index.html">Back to Frontdesk</a></div>
+  </div>
+</section>
+
+</body>
+</html>

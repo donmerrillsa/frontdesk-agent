@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontdesk – 24/7 AI Frontdesk for HVAC</title>
+<meta name="description" content="Answers every missed call, captures full job details, detects emergencies, and books the job automatically.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231857C9'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  /* =========================================================
+     TOKENS
+     ========================================================= */
+  :root{
+    --paper:      #ffffff;
+    --paper-dim:  #f5f7f9;
+    --ink:        #15191c;
+    --slate:      #5b6470;
+    --hairline:   #e3e6ea;
+
+    --cool:       #1857c9;
+    --cool-dark:  #123f94;
+    --heat:       #cf5326;
+    --heat-dim:   #fbe9e0;
+
+    --radius:     6px;
+    --measure:    720px;
+
+    --font-display: 'Big Shoulders', 'Arial Narrow', sans-serif;
+    --font-body:    'Source Sans 3', system-ui, -apple-system, Segoe UI, sans-serif;
+    --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  /* =========================================================
+     RESET
+     ========================================================= */
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:17px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,p,ul,ol{ margin:0; }
+  ul,ol{ padding:0; list-style:none; }
+  a{ color:inherit; text-decoration:none; }
+
+  *:focus-visible{
+    outline:3px solid var(--cool);
+    outline-offset:2px;
+    border-radius:3px;
+  }
+
+  h2{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(2em, 4vw, 2.4em);
+    line-height:1.15;
+    letter-spacing:0.01em;
+  }
+  h3{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(1.2em, 2.4vw, 1.4em);
+    line-height:1.25;
+  }
+  p, li{ font-size:1.05em; line-height:1.6; color:var(--ink); }
+
+  /* scroll-margin keeps anchored headings clear of the sticky header */
+  .section{ padding-block:96px; scroll-margin-top:80px; }
+  @media (max-width:640px){ .section{ padding-block:64px; } }
+
+  .wrap{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; }
+
+  .stat{ font-family:var(--font-mono); font-weight:600; color:var(--cool); }
+  .stat--alert{ font-family:var(--font-mono); font-weight:600; color:var(--heat); }
+
+  /* =========================================================
+     BUTTONS
+     ========================================================= */
+  .btn{
+    display:inline-block;
+    font-family:var(--font-body);
+    font-weight:700;
+    font-size:1.05em;
+    padding:16px 30px;
+    border-radius:var(--radius);
+    transition:background-color .15s ease, transform .1s ease;
+  }
+  .btn--primary{ background:var(--cool); color:#fff; }
+  .btn--primary:hover{ background:var(--cool-dark); }
+  .btn--primary:active{ transform:translateY(1px); }
+  .btn--small{ padding:10px 18px; font-size:0.92em; }
+  .btn--large{ padding:18px 36px; font-size:1.15em; }
+  .btn--on-dark{ background:var(--paper); color:var(--ink); }
+  .btn--on-dark:hover{ background:#e9edf1; }
+
+  /* =========================================================
+     STICKY HEADER
+     ========================================================= */
+  .site-header{ position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--hairline); }
+  .site-header__inner{ max-width:var(--measure); margin-inline:auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .brand{ font-family:var(--font-display); font-weight:700; font-size:1.3em; letter-spacing:0.08em; }
+
+  /* =========================================================
+     HERO
+     ========================================================= */
+  .hero{ padding-top:72px; }
+  .hero__inner{ text-align:center; }
+  .hero__title{ font-family:var(--font-display); font-weight:700; font-size:clamp(2em, 5vw, 2.4em); line-height:1.15; }
+  .hero__subtitle{ margin-top:22px; color:var(--slate); font-size:1.1em; line-height:1.6; }
+  .hero__trial-line{ margin-top:14px; color:var(--cool); font-weight:700; font-size:1.15em; }
+  .hero__cta{ margin-top:32px; }
+  .hero__note{ margin-top:14px; color:var(--slate); font-size:0.92em; }
+  .hero__secondary{ margin-top:14px; font-size:0.95em; }
+  .hero__secondary a{ color:var(--cool); font-weight:600; text-decoration:underline; text-decoration-color:rgba(24,87,201,0.35); }
+  .hero__secondary a:hover{ color:var(--cool-dark); }
+
+  .ticket{
+    position:relative; margin:56px auto 0; max-width:420px;
+    background:var(--paper-dim); border:1px solid var(--hairline); border-radius:10px;
+    padding:22px 22px 18px; text-align:left; transform:rotate(-0.6deg);
+    box-shadow:0 18px 32px -20px rgba(21,25,28,0.35);
+  }
+  .ticket::before,.ticket::after{
+    content:""; position:absolute; left:0; right:0; height:10px;
+    background-image:radial-gradient(circle, var(--paper) 5px, transparent 5.5px);
+    background-size:16px 10px; background-repeat:repeat-x;
+  }
+  .ticket::before{ top:-5px; }
+  .ticket::after{ bottom:-5px; }
+  .ticket__row{ display:flex; gap:10px; align-items:baseline; padding:6px 0; border-bottom:1px dashed var(--hairline); font-family:var(--font-mono); font-size:0.82em; opacity:0; animation:ticket-in .4s ease forwards; }
+  .ticket__row:last-child{ border-bottom:none; }
+  .ticket__row:nth-child(1){ animation-delay:.4s; }
+  .ticket__row:nth-child(2){ animation-delay:.95s; }
+  .ticket__row:nth-child(3){ animation-delay:1.5s; }
+  .ticket__row:nth-child(4){ animation-delay:2.3s; }
+  .ticket__row:nth-child(5){ animation-delay:3.1s; }
+  @keyframes ticket-in{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){ .ticket__row{ opacity:1; animation:none; transform:none; } }
+  .ticket__time{ color:var(--slate); flex-shrink:0; }
+  .ticket__label{ font-weight:600; }
+  .ticket__label--ring{ color:var(--ink); }
+  .ticket__label--miss{ color:var(--heat); }
+  .ticket__label--booked{ color:var(--cool); }
+  .ticket__msg{ color:var(--ink); }
+
+  /* =========================================================
+     SHARED LIST PATTERNS
+     ========================================================= */
+  .list--flag li{ position:relative; padding-left:22px; margin-top:10px; }
+  .list--flag li::before{ content:"—"; position:absolute; left:0; color:var(--heat); font-weight:700; }
+  .list--check li{ position:relative; padding-left:22px; margin-top:10px; }
+  .list--check li::before{ content:"✓"; position:absolute; left:0; color:var(--cool); font-weight:700; }
+  .section-kicker{ margin-top:24px; font-weight:700; font-size:1.1em; }
+
+  /* =========================================================
+     PROBLEM  (moved up — pain comes before capability)
+     ========================================================= */
+  .problem{ background:var(--paper-dim); }
+  .problem__inner > * + *{ margin-top:24px; }
+  .problem__inner .list--flag{ margin-top:8px !important; }
+
+  /* =========================================================
+     HOW IT WORKS  (restored — explains the mechanism)
+     ========================================================= */
+  .how__inner > h2{ margin-bottom:8px; }
+  .how__subhead{ color:var(--slate); font-size:1.2em; margin-bottom:48px; }
+  .how__steps{ position:relative; }
+  .how__steps::before{ content:""; position:absolute; left:19px; top:8px; bottom:8px; width:2px; background:var(--hairline); }
+  .how__steps li{ position:relative; display:flex; gap:22px; padding-bottom:36px; }
+  .how__steps li:last-child{ padding-bottom:0; }
+  .how__num{ position:relative; flex-shrink:0; width:40px; height:40px; border-radius:50%; background:var(--paper); border:2px solid var(--cool); color:var(--cool); font-family:var(--font-display); font-weight:700; font-size:1.1em; display:flex; align-items:center; justify-content:center; }
+  .how__steps h3{ margin-bottom:8px; }
+  .how__sample-link{ margin-top:40px; text-align:center; font-weight:600; }
+  .how__steps p{ color:var(--slate); }
+
+  /* =========================================================
+     FEATURES  (grouped for scanability)
+     ========================================================= */
+  .features{ background:var(--paper-dim); }
+  .features__inner > h2{ margin-bottom:10px; }
+  .features__lead{ font-weight:700; margin-bottom:32px; }
+  .feature-group + .feature-group{ margin-top:32px; }
+  .feature-group__label{ font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.08em; font-size:0.8em; color:var(--cool); font-weight:600; margin-bottom:8px; }
+  .feature-rows li{ padding-block:16px; border-top:1px solid var(--hairline); }
+  .feature-rows li:first-child{ border-top:none; padding-top:0; }
+  .feature-rows strong{ display:block; color:var(--ink); margin-bottom:4px; }
+  .feature-rows__desc{ display:block; color:var(--slate); }
+
+  /* =========================================================
+     PRICING
+     ========================================================= */
+  .pricing__inner > h2{ margin-bottom:40px; }
+  .plan{ background:var(--paper); border:1px solid var(--hairline); border-radius:8px; padding:32px; }
+  .plan + .plan{ margin-top:24px; }
+  .plan--primary{ border-left:4px solid var(--cool); }
+  .plan--secondary{ border-left:4px solid var(--hairline); }
+  .plan__head{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:12px; }
+  .plan__price{ font-family:var(--font-mono); font-weight:500; font-size:1.6em; color:var(--ink); }
+  .plan__price span{ font-size:0.55em; color:var(--slate); }
+  .badge{ display:inline-block; margin-left:10px; padding:3px 10px; border-radius:20px; font-size:0.55em; font-family:var(--font-body); font-weight:700; text-transform:uppercase; letter-spacing:0.04em; vertical-align:middle; }
+  .badge--save{ background:#e7eefb; color:var(--cool); }
+  .plan__lead{ margin-top:16px; color:var(--slate); font-weight:600; }
+
+  .roi-note{ margin-top:40px; }
+  .roi-note h3{ margin-bottom:14px; }
+
+  .compare{ margin-top:32px; border:1px solid var(--hairline); border-radius:8px; overflow:hidden; }
+  .compare__title{ padding:20px 24px 0; }
+  .compare__row{ padding:20px 24px; }
+  .compare__row p{ margin-top:6px; color:var(--slate); }
+  .compare__row + .compare__row{ border-top:1px solid var(--hairline); }
+  .compare__row--cheap{ background:var(--paper-dim); }
+  .compare__row--us{ border-left:4px solid var(--cool); }
+  .compare__label{ font-family:var(--font-display); font-weight:700; }
+  .pricing__cta{ margin-top:40px; text-align:center; }
+
+  /* =========================================================
+     EMERGENCY
+     ========================================================= */
+  .emergency{ background:var(--paper-dim); }
+  .emergency__inner > * + *{ margin-top:24px; }
+  .emergency__inner .list--flag,
+  .emergency__inner .list--check{ margin-top:8px !important; }
+
+  /* =========================================================
+     ROI  (short reinforcing beat right before the ask)
+     ========================================================= */
+  .roi__inner{ text-align:center; }
+  .roi__lead{ margin-top:20px; color:var(--slate); }
+  .roi-grid{
+    margin-top:40px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+  }
+  .roi-grid__item{
+    padding:24px 16px;
+    border:1px solid var(--hairline);
+    border-radius:8px;
+    background:var(--paper);
+  }
+  .roi-grid__number{ font-family:var(--font-mono); font-weight:600; font-size:1.6em; color:var(--cool); }
+  .roi-grid__item--alert .roi-grid__number{ color:var(--heat); }
+  .roi-grid__label{ margin-top:8px; color:var(--slate); font-size:0.88em; line-height:1.4; }
+  @media (max-width:680px){ .roi-grid{ grid-template-columns:repeat(2, 1fr); } }
+
+  /* =========================================================
+     TRIAL
+     ========================================================= */
+  .trial{ background:var(--ink); color:var(--paper); text-align:center; }
+  .trial h2{ color:var(--paper); }
+  .trial__lead{ margin-top:20px; color:rgba(255,255,255,0.85); font-weight:700; font-size:1.1em; }
+  .trial__note{ margin-top:10px; color:rgba(255,255,255,0.65); font-size:0.95em; }
+  .trial .btn{ margin-top:28px; }
+
+  /* =========================================================
+     CONTACT
+     ========================================================= */
+  .contact__inner{ text-align:center; }
+  .contact__inner p{ margin-top:16px; color:var(--slate); }
+  .contact__name{ margin-top:24px !important; font-weight:700; font-size:1.1em; }
+  .contact__phone{ margin-top:6px !important; font-family:var(--font-mono); font-size:1.05em; }
+  .contact__phone a{ color:var(--cool); font-weight:600; }
+  .contact__phone a:hover{ color:var(--cool-dark); text-decoration:underline; }
+  .contact__email{ margin-top:6px !important; font-family:var(--font-mono); font-size:1.05em; }
+  .contact__email a{ color:var(--cool); font-weight:600; }
+  .contact__email a:hover{ color:var(--cool-dark); text-decoration:underline; }
+
+  /* =========================================================
+     FOOTER
+     ========================================================= */
+  .site-footer{ background:var(--paper); border-top:1px solid var(--hairline); padding-block:32px; }
+  .site-footer__inner{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; justify-content:space-between; color:var(--slate); font-size:0.9em; }
+  .site-footer a:hover{ color:var(--cool); }
+  .footer-links{ display:flex; gap:16px; }
+
+  @media (max-width:560px){ .plan__head{ flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="#hero">FRONTDESK</a>
+    <a class="btn btn--primary btn--small" href="trial-signup.html">Start Free Trial</a>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="section hero" id="hero">
+  <div class="wrap hero__inner">
+    <h1 class="hero__title">Your 24/7 AI Frontdesk for HVAC</h1>
+    <p class="hero__subtitle">Answers every missed call, captures full job details, detects emergencies, and books the job automatically.</p>
+    <p class="hero__trial-line">Never lose another HVAC lead — even when you miss the call.</p>
+    <div class="hero__cta">
+      <a class="btn btn--primary" href="trial-signup.html">Start Free 14-Day Trial</a>
+    </div>
+    <p class="hero__note">No setup fee. Live in 72 hours.</p>
+    <p class="hero__secondary"><a href="#how-it-works">Want to see how it actually works first? ↓</a></p>
+
+    <div class="ticket" aria-hidden="true">
+      <div class="ticket__row"><span class="ticket__time">2:14 PM</span><span class="ticket__label ticket__label--ring">Incoming call</span></div>
+      <div class="ticket__row"><span class="ticket__time">2:14 PM</span><span class="ticket__label ticket__label--miss">Missed — texting back</span></div>
+      <div class="ticket__row"><span class="ticket__time">2:14 PM</span><span class="ticket__msg">"Sorry we missed your call — how can we help with your AC or heating?"</span></div>
+      <div class="ticket__row"><span class="ticket__time">2:15 PM</span><span class="ticket__msg">"My AC stopped blowing cold air"</span></div>
+      <div class="ticket__row"><span class="ticket__time">2:16 PM</span><span class="ticket__label ticket__label--booked">Job booked — Thu 9:00 AM</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROBLEM  — pain first
+     ============================================================ -->
+<section class="section problem" id="problem">
+  <div class="wrap problem__inner">
+    <h2>Why HVAC Owners Lose So Many Jobs</h2>
+    <p>Most HVAC shops miss <span class="stat--alert">10–30 calls</span> every month — usually while the owner is on a job, driving, or after hours.</p>
+    <p>Most of those callers:</p>
+    <ul class="list--flag">
+      <li>Don't leave voicemails</li>
+      <li>Don't call back</li>
+      <li>Don't wait</li>
+      <li>Hire the next company</li>
+    </ul>
+    <p class="section-kicker">Frontdesk captures those lost opportunities instantly.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS  — restored: explains the mechanism before asking for trust
+     ============================================================ -->
+<section class="section how" id="how-it-works">
+  <div class="wrap how__inner">
+    <h2>How It Works</h2>
+    <p class="how__subhead">Simple. Fast. No App. No Complicated Setup.</p>
+    <ol class="how__steps">
+      <li><span class="how__num" aria-hidden="true">1</span><div><h3>You keep your number</h3><p>Customers still call the number on your website, cards, and listings. Nothing changes there.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">2</span><div><h3>You get a private Frontdesk number</h3><p>We set it up behind the scenes. No one calls it directly.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">3</span><div><h3>Forward to it only when you're busy</h3><p>One quick carrier setting. Your main line still rings first, every time.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">4</span><div><h3>If you miss the call, Frontdesk takes over</h3><p>Instant text-back within seconds — not voicemail.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">5</span><div><h3>The AI handles the conversation</h3><p>It captures the issue, address, urgency, and system type.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">6</span><div><h3>Routine jobs get booked automatically</h3><p>Emergencies trigger an instant alert to you and your backup contact instead.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">7</span><div><h3>Every call is logged</h3><p>Straight to your Google Sheet, plus your weekly Missed Demand Report.</p></div></li>
+    </ol>
+    <p class="how__sample-link"><a href="sample-conversation.html">See real example conversations →</a></p>
+  </div>
+</section>
+
+<!-- ============================================================
+     FEATURES  — grouped into two scannable clusters
+     ============================================================ -->
+<section class="section features" id="features">
+  <div class="wrap features__inner">
+    <h2>What Your AI Frontdesk Does</h2>
+    <p class="features__lead">Not another missed-call app — your full HVAC front desk.</p>
+
+    <div class="feature-group">
+      <p class="feature-group__label">Call Handling</p>
+      <ul class="feature-rows">
+        <li><strong>Instant missed-call response</strong><span class="feature-rows__desc">Customers get a real conversation within seconds, not voicemail.</span></li>
+        <li><strong>Full job capture</strong><span class="feature-rows__desc">Address, issue, urgency, preferred time, system type.</span></li>
+        <li><strong>Emergency detection</strong><span class="feature-rows__desc">Flags "no cooling," "no heat," burning smell, water leak, system down.</span></li>
+        <li>
+          <strong>Instant alerts to owner + backup contact</strong><span class="feature-rows__desc">You stay in control of dispatching emergency jobs.</span>
+          <!-- TODO (dev): wire backup-contact alert routing (SMS/call) for the on-call rotation -->
+        </li>
+        <li><strong>AI conversation handling</strong><span class="feature-rows__desc">Answers questions, qualifies jobs, books appointments.</span></li>
+      </ul>
+    </div>
+
+    <div class="feature-group">
+      <p class="feature-group__label">Visibility &amp; Reporting</p>
+      <ul class="feature-rows">
+        <li><strong>Lead logging into Google Sheet</strong><span class="feature-rows__desc">Every call, every lead, every detail, automatically.</span></li>
+        <li>
+          <strong>Weekly Missed Demand Report</strong><span class="feature-rows__desc">See captured vs. lost leads and estimated revenue.</span>
+          <!-- TODO (dev): automate weekly report delivery (email digest from Twilio + Sheet data) -->
+        </li>
+        <li><strong>On-demand monthly call report</strong><span class="feature-rows__desc">Clear visibility into your real demand.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PRICING
+     ============================================================ -->
+<section class="section pricing" id="pricing">
+  <div class="wrap pricing__inner">
+    <h2>Pricing</h2>
+
+    <div class="plan plan--primary">
+      <div class="plan__head">
+        <h3>HVAC Frontdesk — Core Plan</h3>
+        <p class="plan__price">$395<span>/mo</span></p>
+      </div>
+      <p class="plan__lead">Flat rate. No per-minute fees. No surprise bills.</p>
+    </div>
+
+    <div class="plan plan--secondary">
+      <div class="plan__head">
+        <h3>Annual Plan <span class="badge badge--save">20% Off</span></h3>
+        <p class="plan__price">$3,600<span>/yr</span></p>
+      </div>
+      <p class="plan__lead">Same features, billed annually — works out to $300/month.</p>
+    </div>
+
+    <div class="pricing__cta">
+      <a class="btn btn--primary" href="trial-signup.html">Start 14-Day Free Trial</a>
+    </div>
+
+    <div class="roi-note">
+      <h3>Why It Costs Less Than You Think</h3>
+      <p>Most HVAC answering services cost <span class="stat">$150–$400/month</span> plus per-minute fees. Frontdesk replaces that cost with a flat <span class="stat">$395/month</span> — with better coverage, better data, and no surprise bills.</p>
+    </div>
+
+    <div class="compare">
+      <h3 class="compare__title">Not Another $49 Missed-Call App</h3>
+      <div class="compare__row compare__row--cheap">
+        <span class="compare__label">$49 Tools</span>
+        <p>Send a text, maybe capture a name and number.</p>
+      </div>
+      <div class="compare__row compare__row--us">
+        <span class="compare__label">Frontdesk</span>
+        <p>Captures full job details, detects emergencies, alerts your on-call person, logs leads, and reports weekly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     EMERGENCY
+     ============================================================ -->
+<section class="section emergency" id="emergency">
+  <div class="wrap emergency__inner">
+    <h2>How Emergencies Are Handled</h2>
+    <p>When a customer reports:</p>
+    <ul class="list--flag">
+      <li>No cooling</li>
+      <li>No heat</li>
+      <li>Burning smell</li>
+      <li>Water leak</li>
+      <li>System down</li>
+    </ul>
+    <p>Frontdesk:</p>
+    <ul class="list--check">
+      <li>Captures full details</li>
+      <li>Flags the call as an emergency</li>
+      <li>Instantly alerts your on-call person</li>
+      <li>Lets a human dispatch the tech</li>
+    </ul>
+    <p class="section-kicker">You stay in control of emergency jobs.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     ROI
+     ============================================================ -->
+<section class="section roi" id="roi">
+  <div class="wrap roi__inner">
+    <h2>ROI: Why Frontdesk Pays for Itself</h2>
+    <p class="roi__lead">Most HVAC shops miss <span class="stat--alert">10–30 calls</span> a month. Here's what that actually costs you — and why Frontdesk pays for itself many times over.</p>
+
+    <div class="roi-grid">
+      <div class="roi-grid__item roi-grid__item--alert">
+        <p class="roi-grid__number">10–30</p>
+        <p class="roi-grid__label">Calls missed every month</p>
+      </div>
+      <div class="roi-grid__item">
+        <p class="roi-grid__number">$395</p>
+        <p class="roi-grid__label">What Frontdesk costs per month</p>
+      </div>
+      <div class="roi-grid__item">
+        <p class="roi-grid__number">$300–$1,200</p>
+        <p class="roi-grid__label">One saved repair covers the month</p>
+      </div>
+      <div class="roi-grid__item">
+        <p class="roi-grid__number">$6,000–$12,000</p>
+        <p class="roi-grid__label">One saved replacement covers Frontdesk 20–30×</p>
+      </div>
+    </div>
+
+    <p class="section-kicker">Even on a slow month, one captured job covers Frontdesk many times over.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRIAL
+     ============================================================ -->
+<section class="section trial" id="trial">
+  <div class="wrap">
+    <h2>Free 14-Day Trial</h2>
+    <p class="trial__lead">See exactly how many leads you're losing today — and how many Frontdesk captures for you.</p>
+    <p class="trial__note">No setup fee. No commitment. Live in 72 hours.</p>
+    <a class="btn btn--on-dark btn--large" href="trial-signup.html">Start Free 14-Day Trial</a>
+  </div>
+</section>
+
+<!-- ============================================================
+     CONTACT
+     ============================================================ -->
+<section class="section contact" id="contact">
+  <div class="wrap contact__inner">
+    <h2>Questions?</h2>
+    <p>Reach out any time — happy to walk through how it works before you start.</p>
+    <p class="contact__name">Don Merrill</p>
+    <p class="contact__phone"><a href="tel:+12108466685">(210) 846-6685</a></p>
+    <p class="contact__email"><a href="mailto:don@buy-mos.com?subject=Question%20about%20Frontdesk">don@buy-mos.com</a></p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span class="brand">FRONTDESK</span>
+    <a href="mailto:don@buy-mos.com">don@buy-mos.com</a>
+    <div class="footer-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <span>© 2026 Frontdesk. Built for HVAC.</span>
+  </div>
+</footer>
+
+</body>
+</html>

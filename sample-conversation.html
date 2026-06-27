@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sample Conversation – Frontdesk</title>
+<meta name="description" content="See exactly what a real customer experiences when Frontdesk answers a missed call.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231857C9'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#ffffff; --paper-dim:#f5f7f9; --ink:#15191c; --slate:#5b6470; --hairline:#e3e6ea;
+    --cool:#1857c9; --cool-dark:#123f94; --heat:#cf5326; --heat-dim:#fbe9e0;
+    --radius:6px; --measure:720px;
+    --font-display:'Big Shoulders','Arial Narrow',sans-serif;
+    --font-body:'Source Sans 3',system-ui,-apple-system,Segoe UI,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--cool); text-decoration:underline; }
+  a:hover{ color:var(--cool-dark); }
+  *:focus-visible{ outline:3px solid var(--cool); outline-offset:2px; border-radius:3px; }
+
+  .wrap{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; }
+  .site-header{ position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--hairline); }
+  .site-header__inner{ max-width:var(--measure); margin-inline:auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .brand{ font-family:var(--font-display); font-weight:700; font-size:1.3em; letter-spacing:0.08em; text-decoration:none; color:var(--ink); }
+  .site-header__back{ font-size:0.95em; color:var(--slate); text-decoration:none; }
+  .site-header__back:hover{ color:var(--cool); }
+
+  article{ padding-block:72px; }
+  h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.8em,4vw,2.2em); margin:0; }
+  .intro{ margin-top:16px; color:var(--slate); font-size:1.1em; max-width:600px; }
+  .note{ margin-top:14px; padding:14px 18px; background:var(--paper-dim); border-left:4px solid var(--cool); border-radius:6px; font-size:0.92em; color:var(--slate); }
+
+  h2.example-title{ font-family:var(--font-display); font-weight:600; font-size:1.2em; margin-top:56px; margin-bottom:6px; }
+  .example-tag{ display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.7em; font-weight:700; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:14px; }
+  .example-tag--emergency{ background:var(--heat-dim); color:var(--heat); }
+  .example-tag--routine{ background:#e7eefb; color:var(--cool); }
+
+  .convo{ border:1px solid var(--hairline); border-radius:10px; padding:8px 20px; background:var(--paper-dim); }
+  .bubble-row{ display:flex; padding:14px 0; border-bottom:1px dashed var(--hairline); gap:14px; align-items:baseline; }
+  .bubble-row:last-child{ border-bottom:none; }
+  .bubble-who{ flex-shrink:0; width:84px; font-family:var(--font-mono); font-size:0.78em; color:var(--slate); text-transform:uppercase; letter-spacing:0.03em; padding-top:2px; }
+  .bubble-who--frontdesk{ color:var(--cool); font-weight:600; }
+  .bubble-text{ font-size:0.98em; }
+  .bubble-text--alert{ font-family:var(--font-mono); font-size:0.85em; color:var(--heat); background:var(--heat-dim); padding:8px 12px; border-radius:6px; }
+
+  .callback{ margin-top:8px; font-size:0.92em; color:var(--slate); font-style:italic; }
+
+  .cta-block{ margin-top:64px; text-align:center; padding:32px; background:var(--ink); border-radius:10px; }
+  .cta-block p{ color:rgba(255,255,255,0.85); margin:0 0 18px; }
+  .btn{ display:inline-block; font-weight:700; font-size:1.05em; padding:16px 30px; border-radius:var(--radius); background:var(--paper); color:var(--ink); text-decoration:none; }
+  .btn:hover{ background:#e9edf1; }
+
+  .site-footer{ background:var(--paper); border-top:1px solid var(--hairline); padding-block:32px; }
+  .site-footer__inner{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; justify-content:space-between; color:var(--slate); font-size:0.9em; }
+  .site-footer a{ color:var(--slate); text-decoration:none; }
+  .site-footer a:hover{ color:var(--cool); }
+  .footer-links{ display:flex; gap:16px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">FRONTDESK</a>
+    <a class="site-header__back" href="index.html">← Back to site</a>
+  </div>
+</header>
+
+<article class="wrap">
+  <h1>What Your Customers Actually Experience</h1>
+  <p class="intro">These are real exchanges from testing the live system — not mock-ups written for marketing. Two things are fixed and never change: the opening greeting, and the line acknowledging an emergency. Everything else adapts naturally to what the caller actually says, the same way a real person would.</p>
+  <p class="note">Every conversation starts the same way, the instant a call is missed:<br><strong>"Hi, this is the front desk for [Your Business Name]. I saw your call come in — how can we help?"</strong></p>
+
+  <h2 class="example-title">Example 1 — Catching an emergency from how someone actually talks</h2>
+  <span class="example-tag example-tag--emergency">Emergency</span>
+  <div class="convo">
+    <div class="bubble-row">
+      <span class="bubble-who">Customer</span>
+      <span class="bubble-text">My AC is blowing hot air.</span>
+    </div>
+    <div class="bubble-row">
+      <span class="bubble-who bubble-who--frontdesk">Frontdesk</span>
+      <span class="bubble-text">Thanks — I'm flagging this as urgent. I'm alerting the on-call tech now. Can I get the address where this is happening?</span>
+    </div>
+    <div class="bubble-row">
+      <span class="bubble-who">Customer</span>
+      <span class="bubble-text">11815 Vance Jackson Rd., #804</span>
+    </div>
+    <div class="bubble-row">
+      <span class="bubble-who bubble-who--frontdesk">Frontdesk</span>
+      <span class="bubble-text">Got it — that's logged, and the on-call tech already has your number and address. Someone will reach out shortly to get a tech out to you. Hang tight.</span>
+    </div>
+  </div>
+  <p class="callback">Notice the customer never said "no cooling" or any other obvious trigger word — they said their AC was doing the opposite of its job. Frontdesk caught the meaning, not just the keywords, and the owner's phone got an alert the moment it did.</p>
+
+  <h2 class="example-title">Example 2 — A routine question that turns into a captured lead</h2>
+  <span class="example-tag example-tag--routine">Routine</span>
+  <div class="convo">
+    <div class="bubble-row">
+      <span class="bubble-who">Customer</span>
+      <span class="bubble-text">How often should I have my Heater/AC serviced?</span>
+    </div>
+    <div class="bubble-row">
+      <span class="bubble-who bubble-who--frontdesk">Frontdesk</span>
+      <span class="bubble-text">Good question — most homeowners get the AC serviced before summer and the heater before winter, so twice a year keeps things running well and catches small problems early. Want me to get a tune-up scheduled for you?</span>
+    </div>
+    <div class="bubble-row">
+      <span class="bubble-who">Customer</span>
+      <span class="bubble-text">Do you handle heat pumps?</span>
+    </div>
+    <div class="bubble-row">
+      <span class="bubble-who bubble-who--frontdesk">Frontdesk</span>
+      <span class="bubble-text">Yes, we work on heat pumps along with standard AC and furnace systems. Is that what you've got?</span>
+    </div>
+  </div>
+  <p class="callback">This customer never described a problem — just asked a general question. Frontdesk answered it briefly, then guided the conversation toward actually capturing the lead, without it feeling like a hard sales pivot.</p>
+
+  <h2 class="example-title">Example 3 — Pricing questions never get a guessed number</h2>
+  <span class="example-tag example-tag--routine">Routine</span>
+  <div class="convo">
+    <div class="bubble-row">
+      <span class="bubble-who">Customer</span>
+      <span class="bubble-text">How much should I expect to pay for Heat/AC maintenance?</span>
+    </div>
+    <div class="bubble-row">
+      <span class="bubble-who bubble-who--frontdesk">Frontdesk</span>
+      <span class="bubble-text">Good question — I don't have exact pricing in front of me right now, but I'll have someone follow up with the details. To get that started, is this for the AC, the heater, or both?</span>
+    </div>
+  </div>
+  <p class="callback">Frontdesk never invents a price. If you'd rather it quote your actual tune-up or diagnostic fees directly instead of deferring every pricing question, that's something we can configure for your account — just ask.</p>
+
+  <div class="cta-block">
+    <p>Ready to see this answer your own missed calls?</p>
+    <a class="btn" href="trial-signup.html">Start Free 14-Day Trial</a>
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span class="brand" style="font-size:1.1em;">FRONTDESK</span>
+    <div class="footer-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <span>© 2026 Frontdesk. Built for HVAC.</span>
+  </div>
+</footer>
+
+</body>
+</html>

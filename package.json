@@ -1,0 +1,14 @@
+{
+  "name": "frontdesk-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Frontdesk — AI front desk for HVAC companies. Static site + trial automation backend.",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "openai": "^4.68.0",
+    "@supabase/supabase-js": "^2.45.4",
+    "twilio": "^5.3.0",
+    "googleapis": "^144.0.0",
+    "stripe": "^17.3.0"
+  }
+}
