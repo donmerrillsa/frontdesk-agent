@@ -8,22 +8,28 @@ swappable providers for SMS, Sheets, and the database itself.
 
 | Layer | Status |
 |---|---|
-| Trial signup → database record | **Real.** `submission-created.js` writes a real trial row. |
-| Missed-call detection + first text-back | **Real.** `voice-incoming.js` — Twilio's Voice webhook fires this the instant a forwarded call lands; sends the fixed greeting and opens the lead record. Needs zero LLM key to test — it's a fixed template, fully tested with mocks already. |
-| Welcome email on signup | **Real.** Sent via `submission-created.js` right after the trial record is created (Resend, same provider as PIA). Deliberately doesn't mention a phone number or ask the owner to verify forwarding — neither exists yet since number provisioning isn't wired into signup. A second, richer email (real number + forwarding steps) belongs once that automation is real — don't add that content here before it's true. |
+| Trial signup → database record | **Real, once Supabase env vars are set — see below.** `submission-created.js` writes a real trial row. |
+| Missed-call detection + first text-back | **Real code, needs Twilio credentials to actually fire.** `voice-incoming.js` — Twilio's Voice webhook fires this the instant a forwarded call lands; sends the fixed greeting and opens the lead record. Needs zero LLM key to test — it's a fixed template, fully tested with mocks already. |
+| Welcome email on signup | **Real code, needs `RESEND_API_KEY` to actually send.** Sent via `submission-created.js` right after the trial record is created (Resend, same provider as PIA). Deliberately doesn't mention a phone number or ask the owner to verify forwarding — neither exists yet since number provisioning isn't wired into signup. A second, richer email (real number + forwarding steps) belongs once that automation is real — don't add that content here before it's true. |
 | Conversation engine logic (state machine, merging, emergency OR-logic) | **Real.** |
 | Conversation engine's actual model call | **Real code, needs your `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`** depending on `LLM_PROVIDER`. |
-| SMS sending | **Mocked** by default (`PROVIDER_MODE=mock`, logs to `.mockdata/sent-sms.json`). Switch to `live` once Twilio is set up. |
-| Google Sheets lead log | **Mocked** by default (writes a local CSV). Switch to `live` once Google Cloud is set up. |
-| Database (trials/leads) | **Mocked** by default (local `.mockdata/db.json`). Switch to `live` once Supabase is set up. |
+| SMS sending | **Mock until real Twilio credentials are present**, then automatic — no flag to flip. Logs to `.mockdata/sent-sms.json` while mocked. |
+| Google Sheets lead log | **Mock until `GOOGLE_SERVICE_ACCOUNT_KEY` is present**, then automatic. Writes a local CSV while mocked. |
+| Database (trials/leads) | **Mock until `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` are present**, then automatic. Local `.mockdata/db.json` while mocked. |
 | Pricing in conversation | **Not built yet.** The engine currently has no price list and will defer/callback rather than quote — flagged, not fixed. |
 | Number provisioning, A2P 10DLC | Not built yet — later phases. |
-| Trial → paid conversion (checkout link, webhook, DB update) | **Real.** Defaults to PayPal (you already have the account); Stripe built in parallel as a true swap, not a stub — change `PAYMENTS_PROVIDER` and nothing else. Idempotent against duplicate webhook delivery — tested. |
+| Trial → paid conversion (checkout link, webhook, DB update) | **Mock until PayPal or Stripe credentials are present**, then automatic. Defaults to PayPal (you already have the account) if both happen to be configured. Idempotent against duplicate webhook delivery — tested. |
 | Triggering a conversion (Day-12 reminder) | **Not automated yet.** `send-checkout-link.js` does the real work once called — call it manually for now (see below) until the Day-12 reminder is built. |
 
-Nothing fake gets shipped to production by accident: every provider defaults
-to mock unless `PROVIDER_MODE=live` is explicitly set as an environment
-variable in Netlify.
+**Each provider goes live independently, the moment its own real credentials
+exist — there's no single switch to remember to flip.** Database, SMS,
+Sheets, email, and payments each check for their own specific environment
+variables and use the real provider automatically once those are set; until
+then they fall back to mock on their own. This means Supabase can be live
+today even though Twilio isn't ready yet — they don't block each other.
+`PROVIDER_MODE=mock` is available as an explicit override (forces every
+provider to mock regardless of what credentials exist) — useful for testing,
+never required for normal use.
 
 ## One-time setup
 
@@ -60,8 +66,6 @@ instead of dragging a folder.
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `ANTHROPIC_API_KEY` (when ready to go live with the conversation engine)
-- `PROVIDER_MODE` — leave unset (mock) until Twilio/Google/Supabase are all
-  actually configured, then set to `live`.
 - Twilio: `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_FROM_NUMBER`,
   `TWILIO_SMS_WEBHOOK_URL`, `TWILIO_VOICE_WEBHOOK_URL` (point these at your
   deployed `sms-incoming` and `voice-incoming` function URLs once Phase 2

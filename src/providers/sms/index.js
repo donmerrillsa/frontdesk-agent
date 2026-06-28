@@ -1,10 +1,13 @@
 // ============================================================
 // SMS PROVIDER — switch
 // ============================================================
-// Defaults to mock. You have to explicitly set PROVIDER_MODE=live
-// to touch real Twilio infrastructure — the safe direction to
-// default in is "nothing real happens by accident."
+// Auto-detects live vs. mock based on whether real Twilio
+// credentials are present. PROVIDER_MODE=mock forces mock
+// regardless, as an explicit safety override.
 
-const mode = process.env.PROVIDER_MODE || "mock";
+const forceMock = process.env.PROVIDER_MODE === "mock";
+const hasCreds = Boolean(
+  process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_NUMBER
+);
 
-module.exports = mode === "live" ? require("./twilio") : require("./mock");
+module.exports = (!forceMock && hasCreds) ? require("./twilio") : require("./mock");

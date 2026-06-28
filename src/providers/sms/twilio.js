@@ -17,13 +17,18 @@ function getClient() {
  * @param {object} params
  * @param {string} params.to - recipient phone number, E.164 format (+1XXXXXXXXXX)
  * @param {string} params.body - message text
+ * @param {string} [params.from] - the sending number, E.164 format. Defaults to
+ *   TWILIO_FROM_NUMBER if omitted — but for any real customer-facing message,
+ *   this should always be that customer's own assigned frontdesk_number, not
+ *   the global default. Texting from the wrong customer's number is exactly
+ *   the kind of bug that only shows up once there's more than one customer.
  * @returns {Promise<{sid: string, status: string}>}
  */
-async function sendSms({ to, body }) {
+async function sendSms({ to, body, from }) {
   const client = getClient();
   const message = await client.messages.create({
     to,
-    from: process.env.TWILIO_FROM_NUMBER,
+    from: from || process.env.TWILIO_FROM_NUMBER,
     body,
   });
   return { sid: message.sid, status: message.status };

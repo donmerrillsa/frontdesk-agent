@@ -52,7 +52,7 @@ exports.handler = async (event) => {
       `Thanks for confirming! Here's your secure checkout link to continue with Frontdesk ` +
       `(${plan === "annual" ? "$3,600/year" : "$395/month"}): ${checkoutUrl}`;
 
-    await sms.sendSms({ to: trial.mobile_number, body: message });
+    await sms.sendSms({ to: trial.mobile_number, body: message, from: trial.frontdesk_number });
 
     console.log(`send-checkout-link: sent ${plan} checkout link to trial ${trialId} (subscription ${subscriptionId})`);
     return { statusCode: 200, body: JSON.stringify({ checkoutUrl, subscriptionId }) };

@@ -24,11 +24,13 @@ function writeLog(entries) {
  * @param {object} params
  * @param {string} params.to - recipient phone number
  * @param {string} params.body - message text
+ * @param {string} [params.from] - which number this should appear to send from
  * @returns {Promise<{sid: string, status: string}>}
  */
-async function sendSms({ to, body }) {
+async function sendSms({ to, body, from }) {
   const entry = {
     to,
+    from: from || null,
     body,
     sentAt: new Date().toISOString(),
   };
@@ -36,7 +38,7 @@ async function sendSms({ to, body }) {
   log.push(entry);
   writeLog(log);
 
-  console.log(`[MOCK SMS] -> ${to}: ${body}`);
+  console.log(`[MOCK SMS] ${from || "(default number)"} -> ${to}: ${body}`);
 
   return { sid: `mock-${Date.now()}`, status: "sent (mock)" };
 }

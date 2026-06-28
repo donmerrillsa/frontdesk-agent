@@ -21,9 +21,10 @@ const readline = require("readline");
 const path = require("path");
 const fs = require("fs");
 
-// Make sure providers run in mock mode regardless of what's set
-// elsewhere — this script should never accidentally touch real
-// Twilio/Google/Supabase infrastructure.
+// Force mock for every provider regardless of what's in the shell's
+// real environment — this script should never touch live Twilio,
+// Supabase, Sheets, or payments infrastructure no matter what
+// credentials happen to be set elsewhere on this machine.
 process.env.PROVIDER_MODE = "mock";
 
 const db = require("../src/providers/db");

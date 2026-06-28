@@ -72,7 +72,7 @@ exports.handler = async (event) => {
       });
     }
 
-    await sms.sendSms({ to: callerNumber, body: greeting });
+    await sms.sendSms({ to: callerNumber, body: greeting, from: frontdeskNumber });
 
     return {
       statusCode: 200,

@@ -1,16 +1,25 @@
 // ============================================================
 // PAYMENTS PROVIDER — switch
 // ============================================================
-// PROVIDER_MODE=mock (the global default) -> mock.js, no real
-// account needed at all.
-//
-// PROVIDER_MODE=live -> picks PAYMENTS_PROVIDER (paypal | stripe),
-// defaulting to paypal since that's the account you already have.
-// Switching to Stripe later is one env var, not a rewrite.
+// Auto-detects live vs. mock per-provider, based on whichever
+// real credentials are present. PAYMENTS_PROVIDER picks which one
+// to prefer if both happen to be configured (defaults to paypal,
+// since that's the account you already have). PROVIDER_MODE=mock
+// forces mock regardless, as an explicit safety override.
 
-const providerMode = process.env.PROVIDER_MODE || "mock";
-const paymentsProvider = process.env.PAYMENTS_PROVIDER || "paypal";
+const forceMock = process.env.PROVIDER_MODE === "mock";
+const preferred = process.env.PAYMENTS_PROVIDER || "paypal";
 
-module.exports = providerMode === "live"
-  ? (paymentsProvider === "stripe" ? require("./stripe") : require("./paypal"))
-  : require("./mock");
+const hasPaypalCreds = Boolean(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET);
+const hasStripeCreds = Boolean(process.env.STRIPE_SECRET_KEY);
+
+let liveModule = null;
+if (!forceMock) {
+  if (preferred === "stripe" && hasStripeCreds) liveModule = require("./stripe");
+  else if (preferred === "paypal" && hasPaypalCreds) liveModule = require("./paypal");
+  // Fall back to whichever IS configured, even if it's not the preferred one.
+  else if (hasStripeCreds) liveModule = require("./stripe");
+  else if (hasPaypalCreds) liveModule = require("./paypal");
+}
+
+module.exports = liveModule || require("./mock");

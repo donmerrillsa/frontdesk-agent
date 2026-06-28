@@ -94,7 +94,7 @@ exports.handler = async (event) => {
     });
 
     // Reply to the caller.
-    await sms.sendSms({ to: callerNumber, body: result.reply });
+    await sms.sendSms({ to: callerNumber, body: result.reply, from: frontdeskNumber });
 
     // Emergency alerting — only fire the FIRST time a conversation
     // crosses into emergency status, not on every subsequent turn.
@@ -104,9 +104,9 @@ exports.handler = async (event) => {
         `Caller: ${callerNumber}. Address: ${result.capturedFields.address || "not yet provided"}. ` +
         `Urgency: ${result.capturedFields.urgency || "unspecified"}. Check your lead log for details.`;
 
-      await sms.sendSms({ to: trial.mobile_number, body: alertMessage });
+      await sms.sendSms({ to: trial.mobile_number, body: alertMessage, from: frontdeskNumber });
       if (trial.backup_number) {
-        await sms.sendSms({ to: trial.backup_number, body: alertMessage });
+        await sms.sendSms({ to: trial.backup_number, body: alertMessage, from: frontdeskNumber });
       }
     }
 
