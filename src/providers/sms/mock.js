@@ -7,8 +7,10 @@
 
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
-const LOG_PATH = path.join(__dirname, "..", "..", "..", ".mockdata", "sent-sms.json");
+// See db/mock.js for why this isn't __dirname-relative.
+const LOG_PATH = path.join(os.tmpdir(), "frontdesk-mockdata", "sent-sms.json");
 
 function readLog() {
   if (!fs.existsSync(LOG_PATH)) return [];

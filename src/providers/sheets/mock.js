@@ -7,8 +7,10 @@
 
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 
-const DATA_DIR = path.join(__dirname, "..", "..", "..", ".mockdata");
+// See db/mock.js for why this isn't __dirname-relative.
+const DATA_DIR = path.join(os.tmpdir(), "frontdesk-mockdata");
 
 function sheetPath(trialId) {
   return path.join(DATA_DIR, `sheet-${trialId}.csv`);

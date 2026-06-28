@@ -20,6 +20,9 @@
 const readline = require("readline");
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
+
+const MOCKDATA_DIR = path.join(os.tmpdir(), "frontdesk-mockdata");
 
 // Force mock for every provider regardless of what's in the shell's
 // real environment — this script should never touch live Twilio,
@@ -135,13 +138,13 @@ async function main() {
   console.log(JSON.stringify(finalLead, null, 2));
 
   console.log(
-    `\nMock data written to: ${path.join(__dirname, "..", ".mockdata")}\n` +
+    `\nMock data written to: ${MOCKDATA_DIR}\n` +
     `(sent-sms.json, db.json — inspect these directly any time.)\n`
   );
 }
 
 async function getLastLead(trialId) {
-  const dbPath = path.join(__dirname, "..", ".mockdata", "db.json");
+  const dbPath = path.join(MOCKDATA_DIR, "db.json");
   if (!fs.existsSync(dbPath)) return null;
   const raw = JSON.parse(fs.readFileSync(dbPath, "utf8"));
   const leads = raw.leads.filter((l) => l.trial_id === trialId);

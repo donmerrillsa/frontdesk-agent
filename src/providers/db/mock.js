@@ -7,9 +7,16 @@
 
 const fs = require("fs");
 const path = require("path");
+const os = require("os");
 const crypto = require("crypto");
 
-const DATA_DIR = path.join(__dirname, "..", "..", "..", ".mockdata");
+// __dirname resolves inside the deployed function's own bundle, which is
+// READ-ONLY at runtime on Netlify (Lambda-based) — writing there crashes
+// with ENOENT the moment this mock path is actually exercised in production.
+// os.tmpdir() resolves correctly to a writable location on Windows, Mac,
+// Linux, AND Netlify's runtime — unlike hardcoding "/tmp", which would work
+// in production but break local testing on Windows.
+const DATA_DIR = path.join(os.tmpdir(), "frontdesk-mockdata");
 const DB_PATH = path.join(DATA_DIR, "db.json");
 
 function readDb() {

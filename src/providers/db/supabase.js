@@ -9,9 +9,18 @@
 //   SUPABASE_SERVICE_ROLE_KEY
 
 const { createClient } = require("@supabase/supabase-js");
+const WebSocket = require("ws");
 
+// Node 20 (this project's runtime) doesn't have the native WebSocket
+// support that @supabase/supabase-js's realtime subsystem expects by
+// default — it initializes that subsystem just from calling createClient(),
+// even though we never use realtime/live subscriptions anywhere in this
+// codebase. Providing the `ws` package as the transport is Supabase's own
+// documented fix for any Node version before 22.
 function getClient() {
-  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
+    realtime: { transport: WebSocket },
+  });
 }
 
 async function createTrial(fields) {
