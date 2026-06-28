@@ -10,6 +10,7 @@ swappable providers for SMS, Sheets, and the database itself.
 |---|---|
 | Trial signup → database record | **Real.** `submission-created.js` writes a real trial row. |
 | Missed-call detection + first text-back | **Real.** `voice-incoming.js` — Twilio's Voice webhook fires this the instant a forwarded call lands; sends the fixed greeting and opens the lead record. Needs zero LLM key to test — it's a fixed template, fully tested with mocks already. |
+| Welcome email on signup | **Real.** Sent via `submission-created.js` right after the trial record is created (Resend, same provider as PIA). Deliberately doesn't mention a phone number or ask the owner to verify forwarding — neither exists yet since number provisioning isn't wired into signup. A second, richer email (real number + forwarding steps) belongs once that automation is real — don't add that content here before it's true. |
 | Conversation engine logic (state machine, merging, emergency OR-logic) | **Real.** |
 | Conversation engine's actual model call | **Real code, needs your `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`** depending on `LLM_PROVIDER`. |
 | SMS sending | **Mocked** by default (`PROVIDER_MODE=mock`, logs to `.mockdata/sent-sms.json`). Switch to `live` once Twilio is set up. |

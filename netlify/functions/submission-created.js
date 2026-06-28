@@ -6,6 +6,8 @@
 // changes needed to trial-signup.html for this to fire.
 
 const db = require("../../src/providers/db");
+const emailProvider = require("../../src/email");
+const { welcomeEmail } = require("../../src/email/templates");
 
 exports.handler = async (event) => {
   try {
@@ -50,6 +52,19 @@ exports.handler = async (event) => {
     });
 
     console.log(`Trial created: ${trial.id} (${trial.business_name})`);
+
+    // Email failure shouldn't undo a successful signup — this function
+    // already ran fire-and-forget after the user was redirected to
+    // trial-thanks.html, so the trial record existing is what matters
+    // most. Log loudly on failure rather than letting it go silent.
+    try {
+      const { subject, html } = welcomeEmail({ ownerName: owner_name, businessName: business_name });
+      await emailProvider.sendEmail({ to: trial.email, subject, html });
+      console.log(`Welcome email sent to ${trial.email}`);
+    } catch (emailErr) {
+      console.error("submission-created: welcome email failed (trial still created):", emailErr);
+    }
+
     return { statusCode: 200, body: JSON.stringify({ trial_id: trial.id }) };
   } catch (err) {
     console.error("submission-created handler error:", err);
