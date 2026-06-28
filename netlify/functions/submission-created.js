@@ -7,7 +7,7 @@
 
 const db = require("../../src/providers/db");
 const emailProvider = require("../../src/email");
-const { welcomeEmail } = require("../../src/email/templates");
+const { welcomeEmail, adminNotification } = require("../../src/email/templates");
 
 exports.handler = async (event) => {
   try {
@@ -63,6 +63,25 @@ exports.handler = async (event) => {
       console.log(`Welcome email sent to ${trial.email}`);
     } catch (emailErr) {
       console.error("submission-created: welcome email failed (trial still created):", emailErr);
+    }
+
+    // Separate try/catch — a failure here shouldn't take down the customer
+    // email above it, or vice versa. ADMIN_EMAIL defaults to don@buy-mos.com
+    // but is overridable via env var without a code change.
+    try {
+      const adminEmail = process.env.ADMIN_EMAIL || "don@buy-mos.com";
+      const { subject, html } = adminNotification({
+        businessName: business_name,
+        ownerName: owner_name,
+        mobileNumber: mobile_number,
+        backupNumber: backup_number,
+        email,
+        trialId: trial.id,
+      });
+      await emailProvider.sendEmail({ to: adminEmail, subject, html });
+      console.log(`Admin notification sent to ${adminEmail}`);
+    } catch (adminEmailErr) {
+      console.error("submission-created: admin notification failed (trial still created):", adminEmailErr);
     }
 
     return { statusCode: 200, body: JSON.stringify({ trial_id: trial.id }) };
