@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Frontdesk – 24/7 AI Frontdesk for HVAC</title>
-<meta name="description" content="Answers every missed call, captures full job details, detects emergencies, and books the job automatically.">
+<meta name="description" content="The moment you miss a call, Frontdesk texts the customer back, finds out what's wrong, and flags anything urgent — so no lead goes cold while you're on a job.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231857C9'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
 
@@ -266,6 +266,8 @@
   .trial h2{ color:var(--paper); }
   .trial__lead{ margin-top:20px; color:rgba(255,255,255,0.85); font-weight:700; font-size:1.1em; }
   .trial__note{ margin-top:10px; color:rgba(255,255,255,0.65); font-size:0.95em; }
+  .trial__note a{ color:rgba(255,255,255,0.85); font-weight:600; text-decoration:underline; text-decoration-color:rgba(255,255,255,0.35); }
+  .trial__note a:hover{ color:#fff; }
   .trial .btn{ margin-top:28px; }
 
   /* =========================================================
@@ -297,7 +299,7 @@
 <header class="site-header">
   <div class="site-header__inner">
     <a class="brand" href="#hero">FRONTDESK</a>
-    <a class="btn btn--primary btn--small" href="trial-signup.html">Start Free Trial</a>
+    <a class="btn btn--primary btn--small" href="/what-happens-next">Start Free Trial</a>
   </div>
 </header>
 
@@ -306,13 +308,13 @@
      ============================================================ -->
 <section class="section hero" id="hero">
   <div class="wrap hero__inner">
-    <h1 class="hero__title">Your 24/7 AI Frontdesk for HVAC</h1>
-    <p class="hero__subtitle">Answers every missed call, captures full job details, detects emergencies, and books the job automatically.</p>
-    <p class="hero__trial-line">Never lose another HVAC lead — even when you miss the call.</p>
+    <h1 class="hero__title">Never Lose Another HVAC Lead to a Missed Call</h1>
+    <p class="hero__subtitle">The moment you miss a call, Frontdesk texts the customer back, finds out what's wrong, and flags anything urgent — so no lead goes cold while you're on a job.</p>
+    <p class="hero__trial-line">$250 one-time setup. 14-day free trial once you're live. $79/month after.</p>
     <div class="hero__cta">
-      <a class="btn btn--primary" href="trial-signup.html">Start Free 14-Day Trial</a>
+      <a class="btn btn--primary" href="/what-happens-next">Start Free Trial</a>
     </div>
-    <p class="hero__note">No setup fee. Live in 72 hours.</p>
+    <p class="hero__note">Setup takes about 2–3 weeks for carrier registration — a telecom anti-spam requirement, not a Frontdesk delay.</p>
     <p class="hero__secondary"><a href="#how-it-works">Want to see how it actually works first? ↓</a></p>
 
     <div class="ticket" aria-hidden="true">
@@ -320,7 +322,7 @@
       <div class="ticket__row"><span class="ticket__time">2:14 PM</span><span class="ticket__label ticket__label--miss">Missed — texting back</span></div>
       <div class="ticket__row"><span class="ticket__time">2:14 PM</span><span class="ticket__msg">"Sorry we missed your call — how can we help with your AC or heating?"</span></div>
       <div class="ticket__row"><span class="ticket__time">2:15 PM</span><span class="ticket__msg">"My AC stopped blowing cold air"</span></div>
-      <div class="ticket__row"><span class="ticket__time">2:16 PM</span><span class="ticket__label ticket__label--booked">Job booked — Thu 9:00 AM</span></div>
+      <div class="ticket__row"><span class="ticket__time">2:16 PM</span><span class="ticket__label ticket__label--booked">Lead captured — logged for follow-up</span></div>
     </div>
   </div>
 </section>
@@ -339,7 +341,7 @@
       <li>Don't wait</li>
       <li>Hire the next company</li>
     </ul>
-    <p class="section-kicker">Frontdesk captures those lost opportunities instantly.</p>
+    <p class="section-kicker">Frontdesk catches those calls the moment they're missed.</p>
   </div>
 </section>
 
@@ -349,17 +351,17 @@
 <section class="section how" id="how-it-works">
   <div class="wrap how__inner">
     <h2>How It Works</h2>
-    <p class="how__subhead">Simple. Fast. No App. No Complicated Setup.</p>
+    <p class="how__subhead">Simple. No App. No Complicated Setup.</p>
     <ol class="how__steps">
       <li><span class="how__num" aria-hidden="true">1</span><div><h3>You keep your number</h3><p>Customers still call the number on your website, cards, and listings. Nothing changes there.</p></div></li>
-      <li><span class="how__num" aria-hidden="true">2</span><div><h3>You get a private Frontdesk number</h3><p>We set it up behind the scenes. No one calls it directly.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">2</span><div><h3>We register your business and provision your number</h3><p>Carrier registration takes about 2–3 weeks — a telecom industry anti-spam requirement, not a Frontdesk delay.</p></div></li>
       <li><span class="how__num" aria-hidden="true">3</span><div><h3>Forward to it only when you're busy</h3><p>One quick carrier setting. Your main line still rings first, every time.</p></div></li>
       <li><span class="how__num" aria-hidden="true">4</span><div><h3>If you miss the call, Frontdesk takes over</h3><p>Instant text-back within seconds — not voicemail.</p></div></li>
       <li><span class="how__num" aria-hidden="true">5</span><div><h3>The AI handles the conversation</h3><p>It captures the issue, address, urgency, and system type.</p></div></li>
-      <li><span class="how__num" aria-hidden="true">6</span><div><h3>Routine jobs get booked automatically</h3><p>Emergencies trigger an instant alert to you and your backup contact instead.</p></div></li>
-      <li><span class="how__num" aria-hidden="true">7</span><div><h3>Every call is logged</h3><p>Straight to your Google Sheet, plus your weekly Missed Demand Report.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">6</span><div><h3>Emergencies trigger an instant alert</h3><p>To you and your backup contact, so a real person dispatches the job.</p></div></li>
+      <li><span class="how__num" aria-hidden="true">7</span><div><h3>Every call is logged</h3><p>Straight to your Google Sheet, plus a weekly Missed Demand Report.</p></div></li>
     </ol>
-    <p class="how__sample-link"><a href="sample-conversation.html">See real example conversations →</a></p>
+    <p class="how__sample-link"><a href="sample-conversation.html">See example conversations →</a></p>
   </div>
 </section>
 
@@ -368,7 +370,7 @@
      ============================================================ -->
 <section class="section features" id="features">
   <div class="wrap features__inner">
-    <h2>What Your AI Frontdesk Does</h2>
+    <h2>What Frontdesk Does</h2>
     <p class="features__lead">Not another missed-call app — your full HVAC front desk.</p>
 
     <div class="feature-group">
@@ -376,12 +378,8 @@
       <ul class="feature-rows">
         <li><strong>Instant missed-call response</strong><span class="feature-rows__desc">Customers get a real conversation within seconds, not voicemail.</span></li>
         <li><strong>Full job capture</strong><span class="feature-rows__desc">Address, issue, urgency, preferred time, system type.</span></li>
-        <li><strong>Emergency detection</strong><span class="feature-rows__desc">Flags "no cooling," "no heat," burning smell, water leak, system down.</span></li>
-        <li>
-          <strong>Instant alerts to owner + backup contact</strong><span class="feature-rows__desc">You stay in control of dispatching emergency jobs.</span>
-          <!-- TODO (dev): wire backup-contact alert routing (SMS/call) for the on-call rotation -->
-        </li>
-        <li><strong>AI conversation handling</strong><span class="feature-rows__desc">Answers questions, qualifies jobs, books appointments.</span></li>
+        <li><strong>Emergency detection</strong><span class="feature-rows__desc">Flags urgent issues even when the customer doesn't use the exact trigger words — it reads meaning, not just keywords.</span></li>
+        <li><strong>Instant alerts to owner + backup contact</strong><span class="feature-rows__desc">You stay in control of dispatching emergency jobs.</span></li>
       </ul>
     </div>
 
@@ -408,39 +406,15 @@
 
     <div class="plan plan--primary">
       <div class="plan__head">
-        <h3>HVAC Frontdesk — Core Plan</h3>
-        <p class="plan__price">$395<span>/mo</span></p>
+        <h3>Frontdesk</h3>
+        <p class="plan__price">$79<span>/mo</span></p>
       </div>
-      <p class="plan__lead">Flat rate. No per-minute fees. No surprise bills.</p>
-    </div>
-
-    <div class="plan plan--secondary">
-      <div class="plan__head">
-        <h3>Annual Plan <span class="badge badge--save">20% Off</span></h3>
-        <p class="plan__price">$3,600<span>/yr</span></p>
-      </div>
-      <p class="plan__lead">Same features, billed annually — works out to $300/month.</p>
+      <p class="plan__lead">Flat rate. No per-minute fees.</p>
+      <p class="plan__lead">$250 one-time setup fee covers carrier registration, number provisioning, AI configuration, and testing before go-live.</p>
     </div>
 
     <div class="pricing__cta">
-      <a class="btn btn--primary" href="trial-signup.html">Start 14-Day Free Trial</a>
-    </div>
-
-    <div class="roi-note">
-      <h3>Why It Costs Less Than You Think</h3>
-      <p>Most HVAC answering services cost <span class="stat">$150–$400/month</span> plus per-minute fees. Frontdesk replaces that cost with a flat <span class="stat">$395/month</span> — with better coverage, better data, and no surprise bills.</p>
-    </div>
-
-    <div class="compare">
-      <h3 class="compare__title">Not Another $49 Missed-Call App</h3>
-      <div class="compare__row compare__row--cheap">
-        <span class="compare__label">$49 Tools</span>
-        <p>Send a text, maybe capture a name and number.</p>
-      </div>
-      <div class="compare__row compare__row--us">
-        <span class="compare__label">Frontdesk</span>
-        <p>Captures full job details, detects emergencies, alerts your on-call person, logs leads, and reports weekly.</p>
-      </div>
+      <a class="btn btn--primary" href="/what-happens-next">Start Free Trial</a>
     </div>
   </div>
 </section>
@@ -475,7 +449,7 @@
      ============================================================ -->
 <section class="section roi" id="roi">
   <div class="wrap roi__inner">
-    <h2>ROI: Why Frontdesk Pays for Itself</h2>
+    <h2>Why It's Worth It</h2>
     <p class="roi__lead">Most HVAC shops miss <span class="stat--alert">10–30 calls</span> a month. Here's what that actually costs you — and why Frontdesk pays for itself many times over.</p>
 
     <div class="roi-grid">
@@ -484,7 +458,7 @@
         <p class="roi-grid__label">Calls missed every month</p>
       </div>
       <div class="roi-grid__item">
-        <p class="roi-grid__number">$395</p>
+        <p class="roi-grid__number">$79</p>
         <p class="roi-grid__label">What Frontdesk costs per month</p>
       </div>
       <div class="roi-grid__item">
@@ -506,10 +480,10 @@
      ============================================================ -->
 <section class="section trial" id="trial">
   <div class="wrap">
-    <h2>Free 14-Day Trial</h2>
-    <p class="trial__lead">See exactly how many leads you're losing today — and how many Frontdesk captures for you.</p>
-    <p class="trial__note">No setup fee. No commitment. Live in 72 hours.</p>
-    <a class="btn btn--on-dark btn--large" href="trial-signup.html">Start Free 14-Day Trial</a>
+    <h2>Ready to Stop Losing Leads to Missed Calls?</h2>
+    <p class="trial__lead">See example conversations first, no signup required, then see exactly what setup involves before you commit.</p>
+    <a class="btn btn--on-dark btn--large" href="/what-happens-next">See What Happens Next</a>
+    <p class="trial__note"><a href="sample-conversation.html">Or see example conversations first →</a></p>
   </div>
 </section>
 

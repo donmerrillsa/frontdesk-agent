@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Happens Next – Frontdesk</title>
+<meta name="description" content="Here's exactly what to expect from signing up to going live.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231857C9'/%3E%3Ctext x='32' y='44' font-family='Arial, sans-serif' font-size='34' font-weight='700' fill='white' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper:#ffffff; --paper-dim:#f5f7f9; --ink:#15191c; --slate:#5b6470; --hairline:#e3e6ea;
+    --cool:#1857c9; --cool-dark:#123f94; --heat:#cf5326; --heat-dim:#fbe9e0;
+    --radius:6px; --measure:720px;
+    --font-display:'Big Shoulders','Arial Narrow',sans-serif;
+    --font-body:'Source Sans 3',system-ui,-apple-system,Segoe UI,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--font-body); font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  a{ color:var(--cool); text-decoration:underline; }
+  a:hover{ color:var(--cool-dark); }
+  *:focus-visible{ outline:3px solid var(--cool); outline-offset:2px; border-radius:3px; }
+
+  .wrap{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; }
+  .site-header{ position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--hairline); }
+  .site-header__inner{ max-width:var(--measure); margin-inline:auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; }
+  .brand{ font-family:var(--font-display); font-weight:700; font-size:1.3em; letter-spacing:0.08em; text-decoration:none; color:var(--ink); }
+  .site-header__back{ font-size:0.95em; color:var(--slate); text-decoration:none; }
+  .site-header__back:hover{ color:var(--cool); }
+
+  article{ padding-block:72px; }
+  h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.8em,4vw,2.2em); margin:0; }
+  .intro{ margin-top:16px; color:var(--slate); font-size:1.1em; max-width:600px; }
+
+  .stat{ font-family:var(--font-mono); font-weight:600; color:var(--cool); }
+  .stat--alert{ font-family:var(--font-mono); font-weight:600; color:var(--heat); }
+
+  .steps{ position:relative; margin-top:56px; }
+  .steps::before{ content:""; position:absolute; left:19px; top:8px; bottom:8px; width:2px; background:var(--hairline); }
+  .steps li{ position:relative; display:flex; gap:22px; padding-bottom:44px; }
+  .steps li:last-child{ padding-bottom:0; }
+  .step__num{ position:relative; flex-shrink:0; width:40px; height:40px; border-radius:50%; background:var(--paper); border:2px solid var(--cool); color:var(--cool); font-family:var(--font-display); font-weight:700; font-size:1.1em; display:flex; align-items:center; justify-content:center; }
+  .steps h2{ font-family:var(--font-display); font-weight:600; font-size:1.2em; margin-bottom:8px; }
+  .steps p{ color:var(--slate); margin:0; }
+  .steps p + p{ margin-top:10px; }
+  .step__cta{ margin-top:14px; font-weight:600; display:inline-block; }
+
+  .contact-block{ margin-top:56px; padding:24px; background:var(--paper-dim); border-radius:10px; }
+  .contact-block p{ margin:0; color:var(--slate); }
+  .contact-block a{ font-weight:600; }
+
+  .cta-block{ margin-top:40px; text-align:center; padding:32px; background:var(--ink); border-radius:10px; }
+  .cta-block p{ color:rgba(255,255,255,0.85); margin:0 0 18px; }
+  .btn{ display:inline-block; font-weight:700; font-size:1.05em; padding:16px 30px; border-radius:var(--radius); background:var(--paper); color:var(--ink); text-decoration:none; }
+  .btn:hover{ background:#e9edf1; }
+
+  .site-footer{ background:var(--paper); border-top:1px solid var(--hairline); padding-block:32px; }
+  .site-footer__inner{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; justify-content:space-between; color:var(--slate); font-size:0.9em; }
+  .site-footer a{ color:var(--slate); text-decoration:none; }
+  .site-footer a:hover{ color:var(--cool); }
+  .footer-links{ display:flex; gap:16px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="index.html">FRONTDESK</a>
+    <a class="site-header__back" href="index.html">← Back to site</a>
+  </div>
+</header>
+
+<article class="wrap">
+  <h1>What Happens Next</h1>
+  <p class="intro">Here's exactly what to expect from signing up to going live.</p>
+
+  <ol class="steps">
+    <li>
+      <span class="step__num" aria-hidden="true">1</span>
+      <div>
+        <h2>See Example Conversations</h2>
+        <p>Before anything else, see the kind of conversation Frontdesk is built to handle. No signup, no commitment.</p>
+        <a class="step__cta" href="sample-conversation.html">See Example Conversations →</a>
+      </div>
+    </li>
+    <li>
+      <span class="step__num" aria-hidden="true">2</span>
+      <div>
+        <h2>Sign Up &amp; Pay the $250 Setup Fee</h2>
+        <p>A one-time <span class="stat">$250</span> setup fee gets your registration started. This covers real setup work — carrier registration, number provisioning, configuring the AI for your business, and testing everything before it goes live. This fee is non-refundable once registration begins — see our full <a href="terms.html">Setup Terms</a> for details.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step__num" aria-hidden="true">3</span>
+      <div>
+        <h2>We Register Your Business (2–3 Weeks)</h2>
+        <p>Before any business can text customers automatically, U.S. wireless carriers require a registration process to confirm you're a real, legitimate business. This protects consumers from spam texts — it applies to every business doing this, not just Frontdesk, and it's not something we can speed up. Typical approval time is <span class="stat">2–3 weeks</span>. We'll keep you posted along the way.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step__num" aria-hidden="true">4</span>
+      <div>
+        <h2>We Set Up &amp; Test Your System</h2>
+        <p>Once approved, we provision your dedicated number, configure the AI with your business details and service area, set up your personal Google Sheet for lead tracking, and test the entire flow — a real call, a real missed-call text, a real response — before calling it done.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step__num" aria-hidden="true">5</span>
+      <div>
+        <h2>You Go Live — Your Free Trial Starts</h2>
+        <p>We'll confirm the exact date in writing. From that date, you get <span class="stat">14 days free</span> to see Frontdesk catch real missed calls for your business.</p>
+      </div>
+    </li>
+    <li>
+      <span class="step__num" aria-hidden="true">6</span>
+      <div>
+        <h2>After Your Trial</h2>
+        <p>If you love it — and we think you will — your subscription continues automatically at <span class="stat">$79/month</span>. No further setup, no surprises. Cancel any time.</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="contact-block">
+    <p><strong>Questions before you start?</strong> Call or text <a href="tel:+12108466685">(210) 846-6685</a>, or email <a href="mailto:don@buy-mos.com?subject=Question%20about%20Frontdesk">don@buy-mos.com</a> — happy to walk through any of this first.</p>
+  </div>
+
+  <div class="cta-block">
+    <p>Ready to get started?</p>
+    <a class="btn" href="trial-signup.html">Start Now — $250 Setup</a>
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span class="brand" style="font-size:1.1em;">FRONTDESK</span>
+    <div class="footer-links">
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+    <span>© 2026 Frontdesk. Built for HVAC.</span>
+  </div>
+</footer>
+
+</body>
+</html>
