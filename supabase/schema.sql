@@ -82,6 +82,12 @@ create table if not exists trials (
   terms_version           text,
   sample_reviewed_at      timestamptz,
 
+  -- Last time the owner was texted about a conversation-engine failure
+  -- (LLM call failed or returned something unparseable). Used to throttle
+  -- owner alerts to at most one per 30-minute window — see
+  -- netlify/functions/sms-incoming.js.
+  last_error_alert_at     timestamptz,
+
   created_at       timestamptz not null default now()
 );
 
@@ -132,3 +138,13 @@ create index if not exists idx_leads_trial_id on leads (trial_id);
 create index if not exists idx_leads_call_type on leads (call_type);
 create index if not exists idx_leads_status on leads (status);
 create index if not exists idx_leads_caller_number on leads (caller_number);
+
+-- ------------------------------------------------------------
+-- MIGRATIONS — run these against an already-created database.
+-- `create table if not exists` above won't add new columns to a
+-- table that already exists, so each new column gets its own
+-- `alter table ... add column if not exists` line here. Safe to
+-- run repeatedly.
+-- ------------------------------------------------------------
+
+alter table trials add column if not exists last_error_alert_at timestamptz;

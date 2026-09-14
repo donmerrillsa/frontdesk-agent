@@ -48,18 +48,23 @@ async function handleTurn({ businessName, pricing = {}, history = [], message, c
     ? `Conversation so far:\n${conversationText}\n\n${contextNote}`
     : contextNote;
 
-  const raw = await llm.complete(systemPrompt, userContent);
-
   let parsed;
   try {
+    const raw = await llm.complete(systemPrompt, userContent);
     parsed = JSON.parse(raw);
   } catch (err) {
-    // Defensive fallback — if the model ever wraps JSON in prose despite
-    // instructions, this is where you'd add extraction logic. Logged
-    // loudly rather than silently swallowed, since this is the one place
-    // a malformed response could otherwise vanish without a trace.
-    console.error("Engine: failed to parse model output as JSON:", raw);
-    throw new Error("Conversation engine received non-JSON response from model");
+    // Model call failed outright, or (defensively) wrapped JSON in prose
+    // despite instructions. Either way, the caller must never get silence —
+    // send the fallback text and let sms-incoming.js know to alert the
+    // owner, instead of throwing and losing the conversation turn entirely.
+    console.error("Engine: conversation turn failed:", err);
+    return {
+      reply: "Thanks for reaching out — someone will get back to you shortly.",
+      capturedFields,
+      emergency: false,
+      readyToWrapUp: false,
+      error: true,
+    };
   }
 
   // Merge newly-learned fields into accumulated state without overwriting
@@ -87,6 +92,7 @@ async function handleTurn({ businessName, pricing = {}, history = [], message, c
     capturedFields: mergedFields,
     emergency,
     readyToWrapUp: Boolean(parsed.ready_to_wrap_up),
+    error: false,
   };
 }
 

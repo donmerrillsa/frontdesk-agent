@@ -96,6 +96,20 @@ exports.handler = async (event) => {
     // Reply to the caller.
     await sms.sendSms({ to: callerNumber, body: result.reply, from: frontdeskNumber });
 
+    // Owner alerting for engine failures — throttled to one alert per
+    // trial per 30-minute window so a run of failures doesn't spam the
+    // owner's phone. The caller still gets the fallback text every time;
+    // only this owner-facing alert is throttled.
+    if (result.error) {
+      const ALERT_THROTTLE_MS = 30 * 60 * 1000;
+      const lastAlertAt = trial.last_error_alert_at ? new Date(trial.last_error_alert_at).getTime() : 0;
+      if (Date.now() - lastAlertAt >= ALERT_THROTTLE_MS) {
+        const ownerAlert = `Frontdesk error: ${trial.business_name} — a conversation failed, please check logs.`;
+        await sms.sendSms({ to: trial.mobile_number, body: ownerAlert, from: frontdeskNumber });
+        await db.updateTrial(trial.id, { last_error_alert_at: new Date().toISOString() });
+      }
+    }
+
     // Emergency alerting — only fire the FIRST time a conversation
     // crosses into emergency status, not on every subsequent turn.
     if (result.emergency && !wasAlreadyEmergency) {
