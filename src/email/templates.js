@@ -41,29 +41,33 @@ function welcomeEmail({ ownerName, businessName }) {
               <tr>
                 <td style="padding:16px 20px;">
                   <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:15px; color:#15191c;">
-                    <strong>We'll reach out by phone or email within 24 hours</strong> to confirm a few details and get your trial number set up on our end.
+                    <strong>We'll reach out by phone or email within 24 hours</strong> to confirm a few details, collect the one-time $250 setup fee, and get registration started.
                   </p>
                 </td>
               </tr>
             </table>
 
-            <h2 style="margin:0 0 12px; font-family:Arial, Helvetica, sans-serif; font-size:17px; color:#15191c;">Your 14 days, at a glance</h2>
+            <h2 style="margin:0 0 12px; font-family:Arial, Helvetica, sans-serif; font-size:17px; color:#15191c;">From here to your first day live</h2>
             <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:Arial, Helvetica, sans-serif; font-size:14px; color:#15191c; margin-bottom:28px;">
               <tr>
-                <td style="padding:6px 0; vertical-align:top; width:90px; color:#1857c9; font-weight:bold;">Day 0</td>
-                <td style="padding:6px 0;">Don personally sets up your trial number and walks you through call forwarding.</td>
+                <td style="padding:6px 0; vertical-align:top; width:110px; color:#1857c9; font-weight:bold;">Within 24 hrs</td>
+                <td style="padding:6px 0;">We confirm details and collect the $250 one-time setup fee to kick off registration.</td>
               </tr>
               <tr>
-                <td style="padding:6px 0; vertical-align:top; color:#1857c9; font-weight:bold;">Days 1–14</td>
-                <td style="padding:6px 0;">Every missed call gets an instant text-back, a captured job, and an emergency alert if it's urgent — automatically.</td>
+                <td style="padding:6px 0; vertical-align:top; color:#1857c9; font-weight:bold;">About 2–3 weeks</td>
+                <td style="padding:6px 0;">Carrier registration, number provisioning, AI configuration, and testing. This is a telecom industry anti-spam requirement that applies to every business — not something we can speed up. We'll keep you posted along the way.</td>
               </tr>
               <tr>
-                <td style="padding:6px 0; vertical-align:top; color:#1857c9; font-weight:bold;">Around Day 12</td>
+                <td style="padding:6px 0; vertical-align:top; color:#1857c9; font-weight:bold;">Go-live day</td>
+                <td style="padding:6px 0;">We'll confirm the exact date in writing. Your 14-day free trial starts that day.</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0; vertical-align:top; color:#1857c9; font-weight:bold;">Trial day ~12</td>
                 <td style="padding:6px 0;">We'll check in with how the trial's gone and what it's caught so far.</td>
               </tr>
               <tr>
-                <td style="padding:6px 0; vertical-align:top; color:#1857c9; font-weight:bold;">Day 14</td>
-                <td style="padding:6px 0;">Your decision point — continue as a paying customer, or let the trial end. No pressure either way, and nothing's charged until you say yes.</td>
+                <td style="padding:6px 0; vertical-align:top; color:#1857c9; font-weight:bold;">Trial day 14</td>
+                <td style="padding:6px 0;">Your decision point — continue at $79/month, or let the trial end. No pressure either way.</td>
               </tr>
             </table>
 
@@ -72,15 +76,15 @@ function welcomeEmail({ ownerName, businessName }) {
               When a call to your business goes unanswered, Frontdesk texts the caller back within seconds, asks what's going on, captures the job details, and flags anything urgent straight to your phone.
             </p>
 
-            <h2 style="margin:0 0 12px; font-family:Arial, Helvetica, sans-serif; font-size:17px; color:#15191c;">Pricing, if you decide to continue</h2>
+            <h2 style="margin:0 0 12px; font-family:Arial, Helvetica, sans-serif; font-size:17px; color:#15191c;">Pricing</h2>
             <p style="margin:0 0 4px; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:#15191c;">
-              <strong>Core Plan:</strong> $395/month, flat rate, no per-minute fees.
+              <strong>$250 one-time setup fee</strong> — covers carrier registration, number provisioning, AI configuration, and testing.
             </p>
             <p style="margin:0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:#15191c;">
-              <strong>Annual Plan:</strong> $3,600/year (equivalent to $300/month).
+              <strong>$79/month</strong> after your free trial — flat rate, no per-minute fees. Cancel any time.
             </p>
             <p style="margin:0 0 20px; font-family:Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#5b6470;">
-              No payment information is collected during your trial — that conversation only happens if and when you decide to continue.
+              We'll confirm exact payment details when we reach out — nothing is charged without your go-ahead.
             </p>
 
             <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.6; color:#5b6470;">
