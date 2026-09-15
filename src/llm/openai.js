@@ -17,7 +17,7 @@ const OpenAI = require("openai");
 // exact same conversations. Check platform.openai.com/docs/models for the
 // current mini-class model name — that naming shifts more often than
 // Anthropic's.
-const MODEL = process.env.OPENAI_MODEL || "gpt-4o";
+const MODEL = process.env.OPENAI_MODEL || "gpt-5.6-luna";
 
 /**
  * @param {string} systemPrompt
@@ -29,7 +29,7 @@ async function complete(systemPrompt, userContent) {
 
   const response = await client.chat.completions.create({
     model: MODEL,
-    max_tokens: 500,
+    max_completion_tokens: 500,
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: systemPrompt },
