@@ -24,6 +24,23 @@ const { matchesEmergencyKeyword } = require("./keywordTriggers");
 // turn from closing out an emergency without a way to reach the caller.
 const EMERGENCY_REQUIRED_FIELDS = ["address", "name", "callback_number"];
 
+// Deterministic safety floor, prepended to every FIRST emergency reply
+// regardless of what the model produces — same reliability pattern as
+// the keyword backstop and the wrap-up gate above. Harmless boilerplate
+// on a non-dangerous emergency (e.g. "no heat"); a real floor on a
+// dangerous one (gas smell, smoke, sparks). The model still adds
+// hazard-specific detail on top of this via prompts.js.
+const EMERGENCY_SAFETY_LINE = "If you're in any danger, please get to a safe location first.";
+
+// isLiveConversation distinguishes a real SMS conversation (sms-incoming.js,
+// where a real on-call tech alert fires and a real lead is logged) from the
+// sandboxed demo (demo-chat.js, where nothing real happens). Used to avoid
+// the AI claiming real-world actions/follow-through that won't occur.
+function buildEmergencyAcknowledgment(isLiveConversation) {
+  const techLine = isLiveConversation ? " I'm alerting the on-call tech now." : "";
+  return `Thanks — I'm flagging this as urgent. ${EMERGENCY_SAFETY_LINE}${techLine}`;
+}
+
 /**
  * Handles one turn of the conversation.
  *
@@ -35,6 +52,7 @@ const EMERGENCY_REQUIRED_FIELDS = ["address", "name", "callback_number"];
  * @param {object} params.capturedFields - accumulated state so far: { address, issue, urgency, preferred_time, system_type, name, callback_number }
  * @param {boolean} [params.alreadyEmergency] - whether this conversation was already flagged as an emergency before this turn
  * @param {string} [params.knownCallbackNumber] - a callback number already known from another channel (e.g. the Twilio "From" number); when set, the model is told not to ask for one
+ * @param {boolean} [params.isLiveConversation] - true for a real SMS conversation, false/omitted for the sandboxed demo; controls whether replies claim real-world follow-through (on-call tech alert, "someone will follow up") that only actually happens on the live path
  * @returns {Promise<{
  *   reply: string,
  *   capturedFields: object,
@@ -42,8 +60,8 @@ const EMERGENCY_REQUIRED_FIELDS = ["address", "name", "callback_number"];
  *   readyToWrapUp: boolean
  * }>}
  */
-async function handleTurn({ businessName, pricing = {}, history = [], message, capturedFields = {}, alreadyEmergency = false, knownCallbackNumber }) {
-  const systemPrompt = buildSystemPrompt({ businessName, pricing, knownCallbackNumber });
+async function handleTurn({ businessName, pricing = {}, history = [], message, capturedFields = {}, alreadyEmergency = false, knownCallbackNumber, isLiveConversation = false }) {
+  const systemPrompt = buildSystemPrompt({ businessName, pricing, knownCallbackNumber, isLiveConversation });
 
   const contextNote =
     `Captured so far: ${JSON.stringify(capturedFields)}\n\n` +
@@ -68,7 +86,9 @@ async function handleTurn({ businessName, pricing = {}, history = [], message, c
     // owner, instead of throwing and losing the conversation turn entirely.
     console.error("Engine: conversation turn failed:", err);
     return {
-      reply: "Thanks for reaching out — someone will get back to you shortly.",
+      reply: isLiveConversation
+        ? "Thanks for reaching out — someone will get back to you shortly."
+        : "Thanks for reaching out — something went wrong on our end just now. (This is a demo; no real message was sent or lost.)",
       capturedFields,
       emergency: false,
       readyToWrapUp: false,
@@ -104,7 +124,7 @@ async function handleTurn({ businessName, pricing = {}, history = [], message, c
   // like a broken record to the caller.
   const isNewEmergency = emergency && !alreadyEmergency;
   const reply = isNewEmergency
-    ? `Thanks — I'm flagging this as urgent. I'm alerting the on-call tech now. ${parsed.reply || ""}`.trim()
+    ? `${buildEmergencyAcknowledgment(isLiveConversation)} ${parsed.reply || ""}`.trim()
     : parsed.reply;
 
   const emergencyFieldsComplete =
