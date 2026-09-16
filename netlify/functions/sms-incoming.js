@@ -77,6 +77,7 @@ exports.handler = async (event) => {
       capturedFields,
       alreadyEmergency: wasAlreadyEmergency,
       knownCallbackNumber: callerNumber,
+      isLiveConversation: true,
     });
 
     const updatedTranscript = [
