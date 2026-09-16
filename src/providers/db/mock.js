@@ -94,7 +94,7 @@ async function getTrialByNumber(frontdeskNumber) {
 }
 
 /**
- * @param {object} fields - trial_id, caller_number, call_type, address, issue, urgency, preferred_time, outcome, notes
+ * @param {object} fields - trial_id, caller_number, call_type, address, issue, urgency, preferred_time, name, outcome, notes
  * @returns {Promise<object>} the inserted lead row
  */
 async function createLead(fields) {
@@ -109,6 +109,7 @@ async function createLead(fields) {
     issue: fields.issue || null,
     urgency: fields.urgency || null,
     preferred_time: fields.preferred_time || null,
+    name: fields.name || null,
     outcome: fields.outcome || null,
     notes: fields.notes || null,
     status: fields.status || "in_progress",

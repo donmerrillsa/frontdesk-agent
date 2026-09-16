@@ -35,12 +35,11 @@
   .site-header__back{ font-size:0.95em; color:var(--slate); text-decoration:none; }
   .site-header__back:hover{ color:var(--cool); }
 
-  article{ padding-block:56px; }
-  h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.8em,4vw,2.2em); margin:0; }
-  .intro{ margin-top:16px; color:var(--slate); font-size:1.05em; max-width:600px; }
-  .note{ margin-top:14px; padding:14px 18px; background:var(--paper-dim); border-left:4px solid var(--cool); border-radius:6px; font-size:0.9em; color:var(--slate); }
+  article{ padding-block:32px; }
+  h1{ font-family:var(--font-display); font-weight:700; font-size:clamp(1.5em,4vw,1.9em); margin:0; }
+  .intro{ margin-top:10px; color:var(--slate); font-size:0.98em; max-width:600px; }
 
-  .setup{ margin-top:32px; display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+  .setup{ margin-top:18px; display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
   .setup label{ font-size:0.9em; color:var(--slate); font-weight:600; }
   .setup input[type="text"]{
     flex:1; min-width:220px; padding:10px 12px; border:1px solid var(--hairline); border-radius:var(--radius);
@@ -76,6 +75,11 @@
     text-transform:uppercase; letter-spacing:0.03em; background:var(--heat); color:#fff;
   }
 
+  .system-note{
+    align-self:center; max-width:92%; margin:2px auto 4px; padding:8px 14px; border-radius:8px;
+    border:1px dashed var(--hairline); color:var(--slate); font-size:0.85em; text-align:center; line-height:1.4;
+  }
+
   .typing{ font-size:0.85em; color:var(--slate); font-style:italic; padding:0 20px 12px; }
 
   .convo__inputbar{ display:flex; gap:10px; padding:14px 20px; border-top:1px solid var(--hairline); background:var(--paper); }
@@ -90,8 +94,6 @@
   }
   .convo__inputbar button:hover{ background:var(--cool-dark); }
   .convo__inputbar button:disabled{ background:var(--hairline); color:var(--slate); cursor:not-allowed; }
-
-  .disclaimer{ margin-top:14px; font-size:0.85em; color:var(--slate); }
 
   .site-footer{ background:var(--paper); border-top:1px solid var(--hairline); padding-block:32px; }
   .site-footer__inner{ max-width:var(--measure); margin-inline:auto; padding-inline:24px; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; justify-content:space-between; color:var(--slate); font-size:0.9em; }
@@ -111,8 +113,7 @@
 
 <article class="wrap">
   <h1>Try the Live Demo</h1>
-  <p class="intro">This is a sandboxed conversation with the real Frontdesk AI — the same conversation engine used in production. Nothing you type here is saved, no real text message is sent, and no real business is contacted.</p>
-  <p class="note">Enter a business name below (optional), then chat as if you're the customer whose call was just missed. Refreshing the page resets everything.</p>
+  <p class="intro">A sandboxed chat with the real Frontdesk AI — nothing here is saved or sent to a real business.</p>
 
   <div class="setup">
     <label for="businessNameInput">Business name</label>
@@ -125,12 +126,10 @@
     <div class="typing" id="typingIndicator" hidden>Frontdesk is typing…</div>
     <form class="convo__inputbar" id="chatForm">
       <label class="sr-only" for="messageInput" style="position:absolute;left:-9999px;">Message</label>
-      <input type="text" id="messageInput" placeholder="Type your message…" autocomplete="off">
+      <input type="text" id="messageInput" placeholder="Type your message…" autocomplete="off" autofocus>
       <button type="submit" id="sendBtn">Send</button>
     </form>
   </div>
-
-  <p class="disclaimer">Demo only — sandboxed, no data saved, no real alerts sent. This is not connected to any real business or phone number.</p>
 </article>
 
 <footer class="site-footer">
@@ -147,6 +146,7 @@
 <script>
 (function () {
   const DEFAULT_BUSINESS_NAME = "a local HVAC company";
+  const OPENING_NOTE = "Hi — this demo shows how Frontdesk texts back a missed call. Try describing a service issue below, like you're the customer. (Nothing here is saved or sent — this is a sandbox.)";
 
   const messagesEl = document.getElementById("messages");
   const typingEl = document.getElementById("typingIndicator");
@@ -191,11 +191,21 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
+  function addSystemNote(text) {
+    const note = document.createElement("div");
+    note.className = "system-note";
+    note.textContent = text;
+    messagesEl.appendChild(note);
+  }
+
   function resetConversation() {
     history = [];
     capturedFields = {};
     emergency = false;
     messagesEl.innerHTML = "";
+    // Framing only — not pushed into history, so it's never sent to
+    // demo-chat.js or seen by the model as something it said.
+    addSystemNote(OPENING_NOTE);
     const opening = greeting();
     addBubble("assistant", opening);
     history.push({ role: "assistant", text: opening });
@@ -254,6 +264,7 @@
   businessNameInput.addEventListener("change", resetConversation);
 
   resetConversation();
+  inputEl.focus();
 })();
 </script>
 

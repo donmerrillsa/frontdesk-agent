@@ -100,6 +100,7 @@ async function createLead(fields) {
       issue: fields.issue || null,
       urgency: fields.urgency || null,
       preferred_time: fields.preferred_time || null,
+      name: fields.name || null,
       outcome: fields.outcome || null,
       notes: fields.notes || null,
       status: fields.status || "in_progress",

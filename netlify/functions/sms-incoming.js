@@ -59,6 +59,7 @@ exports.handler = async (event) => {
       issue: lead.issue,
       urgency: lead.urgency,
       preferred_time: lead.preferred_time,
+      name: lead.name,
     };
 
     const history = (lead.transcript || []).map((turn) => ({
@@ -75,6 +76,7 @@ exports.handler = async (event) => {
       message,
       capturedFields,
       alreadyEmergency: wasAlreadyEmergency,
+      knownCallbackNumber: callerNumber,
     });
 
     const updatedTranscript = [
@@ -90,6 +92,7 @@ exports.handler = async (event) => {
       issue: result.capturedFields.issue || null,
       urgency: result.capturedFields.urgency || null,
       preferred_time: result.capturedFields.preferred_time || null,
+      name: result.capturedFields.name || null,
       call_type: callType,
       transcript: updatedTranscript,
       status: result.readyToWrapUp ? "complete" : "in_progress",

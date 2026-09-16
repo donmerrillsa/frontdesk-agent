@@ -17,6 +17,13 @@ const llm = require("../llm");
 const { buildSystemPrompt } = require("./prompts");
 const { matchesEmergencyKeyword } = require("./keywordTriggers");
 
+// Deterministic backstop: an emergency conversation can never be marked
+// ready to wrap up while any of these are still missing, regardless of
+// what the model self-reports — same spirit as the keyword-match safety
+// net below for emergency detection itself. Prevents a single bad model
+// turn from closing out an emergency without a way to reach the caller.
+const EMERGENCY_REQUIRED_FIELDS = ["address", "name", "callback_number"];
+
 /**
  * Handles one turn of the conversation.
  *
@@ -25,8 +32,9 @@ const { matchesEmergencyKeyword } = require("./keywordTriggers");
  * @param {object} [params.pricing] - owner-configured price list; omit or pass {} if none configured
  * @param {Array<{role: "caller"|"assistant", text: string}>} params.history - prior turns
  * @param {string} params.message - the caller's latest message
- * @param {object} params.capturedFields - accumulated state so far: { address, issue, urgency, preferred_time, system_type }
+ * @param {object} params.capturedFields - accumulated state so far: { address, issue, urgency, preferred_time, system_type, name, callback_number }
  * @param {boolean} [params.alreadyEmergency] - whether this conversation was already flagged as an emergency before this turn
+ * @param {string} [params.knownCallbackNumber] - a callback number already known from another channel (e.g. the Twilio "From" number); when set, the model is told not to ask for one
  * @returns {Promise<{
  *   reply: string,
  *   capturedFields: object,
@@ -34,8 +42,8 @@ const { matchesEmergencyKeyword } = require("./keywordTriggers");
  *   readyToWrapUp: boolean
  * }>}
  */
-async function handleTurn({ businessName, pricing = {}, history = [], message, capturedFields = {}, alreadyEmergency = false }) {
-  const systemPrompt = buildSystemPrompt({ businessName, pricing });
+async function handleTurn({ businessName, pricing = {}, history = [], message, capturedFields = {}, alreadyEmergency = false, knownCallbackNumber }) {
+  const systemPrompt = buildSystemPrompt({ businessName, pricing, knownCallbackNumber });
 
   const contextNote =
     `Captured so far: ${JSON.stringify(capturedFields)}\n\n` +
@@ -77,6 +85,15 @@ async function handleTurn({ businessName, pricing = {}, history = [], message, c
     }
   }
 
+  // When a callback number is already known from another channel (Twilio),
+  // the prompt tells the model not to ask for one — so it never appears in
+  // parsed.fields. Seed it here instead, so it still shows up in
+  // capturedFields.callback_number for the wrap-up gate below and for
+  // whatever the caller does with the returned state.
+  if (knownCallbackNumber && !mergedFields.callback_number) {
+    mergedFields.callback_number = knownCallbackNumber;
+  }
+
   // Emergency = keyword match OR model judgment. Either can flag it;
   // neither can un-flag it once true. See keywordTriggers.js for why.
   const keywordHit = matchesEmergencyKeyword(message);
@@ -90,11 +107,15 @@ async function handleTurn({ businessName, pricing = {}, history = [], message, c
     ? `Thanks — I'm flagging this as urgent. I'm alerting the on-call tech now. ${parsed.reply || ""}`.trim()
     : parsed.reply;
 
+  const emergencyFieldsComplete =
+    !emergency || EMERGENCY_REQUIRED_FIELDS.every((key) => Boolean(mergedFields[key]));
+  const readyToWrapUp = Boolean(parsed.ready_to_wrap_up) && emergencyFieldsComplete;
+
   return {
     reply,
     capturedFields: mergedFields,
     emergency,
-    readyToWrapUp: Boolean(parsed.ready_to_wrap_up),
+    readyToWrapUp,
     error: false,
   };
 }
