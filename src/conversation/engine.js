@@ -26,6 +26,7 @@ const { matchesEmergencyKeyword } = require("./keywordTriggers");
  * @param {Array<{role: "caller"|"assistant", text: string}>} params.history - prior turns
  * @param {string} params.message - the caller's latest message
  * @param {object} params.capturedFields - accumulated state so far: { address, issue, urgency, preferred_time, system_type }
+ * @param {boolean} [params.alreadyEmergency] - whether this conversation was already flagged as an emergency before this turn
  * @returns {Promise<{
  *   reply: string,
  *   capturedFields: object,
@@ -33,7 +34,7 @@ const { matchesEmergencyKeyword } = require("./keywordTriggers");
  *   readyToWrapUp: boolean
  * }>}
  */
-async function handleTurn({ businessName, pricing = {}, history = [], message, capturedFields = {} }) {
+async function handleTurn({ businessName, pricing = {}, history = [], message, capturedFields = {}, alreadyEmergency = false }) {
   const systemPrompt = buildSystemPrompt({ businessName, pricing });
 
   const contextNote =
@@ -81,9 +82,11 @@ async function handleTurn({ businessName, pricing = {}, history = [], message, c
   const keywordHit = matchesEmergencyKeyword(message);
   const emergency = Boolean(keywordHit || parsed.emergency_suspected);
 
-  // For emergencies, the acknowledgment line is fixed, not model-generated —
-  // we don't want phrasing variance on the one message that matters most.
-  const reply = emergency
+  // Fixed acknowledgment only on the turn that FIRST crosses into emergency —
+  // repeating it on every later turn of an already-flagged emergency reads
+  // like a broken record to the caller.
+  const isNewEmergency = emergency && !alreadyEmergency;
+  const reply = isNewEmergency
     ? `Thanks — I'm flagging this as urgent. I'm alerting the on-call tech now. ${parsed.reply || ""}`.trim()
     : parsed.reply;
 

@@ -66,12 +66,15 @@ exports.handler = async (event) => {
       text: turn.text,
     }));
 
+    const wasAlreadyEmergency = lead.call_type === "emergency";
+
     const result = await handleTurn({
       businessName: trial.business_name,
       pricing: trial.pricing || {},
       history,
       message,
       capturedFields,
+      alreadyEmergency: wasAlreadyEmergency,
     });
 
     const updatedTranscript = [
@@ -80,7 +83,6 @@ exports.handler = async (event) => {
       { role: "assistant", text: result.reply },
     ];
 
-    const wasAlreadyEmergency = lead.call_type === "emergency";
     const callType = result.emergency ? "emergency" : lead.call_type;
 
     await db.updateLead(lead.id, {
