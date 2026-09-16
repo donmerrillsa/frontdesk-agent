@@ -158,6 +158,7 @@
 
   let history = [];
   let capturedFields = {};
+  let emergency = false;
 
   function currentBusinessName() {
     const typed = businessNameInput.value.trim();
@@ -193,6 +194,7 @@
   function resetConversation() {
     history = [];
     capturedFields = {};
+    emergency = false;
     messagesEl.innerHTML = "";
     const opening = greeting();
     addBubble("assistant", opening);
@@ -217,6 +219,7 @@
           history,
           message,
           capturedFields,
+          emergency,
         }),
       });
 
@@ -227,6 +230,7 @@
 
       const result = await res.json();
       capturedFields = result.capturedFields || capturedFields;
+      emergency = !!result.emergency;
       addBubble("assistant", result.reply, { emergency: !!result.emergency });
       history.push({ role: "assistant", text: result.reply });
     } catch (err) {

@@ -25,7 +25,7 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: "Invalid JSON body" };
   }
 
-  const { businessName, history, message, capturedFields } = payload;
+  const { businessName, history, message, capturedFields, emergency } = payload;
 
   if (!message || typeof message !== "string") {
     return { statusCode: 400, body: "Missing required field: message" };
@@ -38,6 +38,11 @@ exports.handler = async (event) => {
       history: Array.isArray(history) ? history : [],
       message,
       capturedFields: capturedFields && typeof capturedFields === "object" ? capturedFields : {},
+      // The demo has no persisted lead row, so the browser is the only thing
+      // that remembers whether this conversation already crossed into
+      // emergency status — it echoes back the "emergency" flag from the
+      // previous response, same as it does for capturedFields.
+      alreadyEmergency: Boolean(emergency),
     });
 
     // Demo mode: no db writes, no SMS, no owner/emergency alerts — the
