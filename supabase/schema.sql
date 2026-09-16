@@ -117,6 +117,7 @@ create table if not exists leads (
   issue           text,
   urgency         text,
   preferred_time  text,
+  name            text,
 
   -- booked | callback | no_answer
   outcome         text,
@@ -148,3 +149,4 @@ create index if not exists idx_leads_caller_number on leads (caller_number);
 -- ------------------------------------------------------------
 
 alter table trials add column if not exists last_error_alert_at timestamptz;
+alter table leads add column if not exists name text;
