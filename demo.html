@@ -55,6 +55,9 @@
   .convo{
     margin-top:24px; border:1px solid var(--hairline); border-radius:10px; background:var(--paper-dim);
     display:flex; flex-direction:column; height:min(520px, 60vh); overflow:hidden;
+    /* Measured sticky .site-header height is ~64px; this keeps scrollIntoView()
+       from tucking the top of the widget underneath it. */
+    scroll-margin-top:76px;
   }
   .convo__messages{ flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:14px; }
 
@@ -121,7 +124,7 @@
     <div class="typing" id="typingIndicator" hidden>Frontdesk is typing…</div>
     <form class="convo__inputbar" id="chatForm">
       <label class="sr-only" for="messageInput" style="position:absolute;left:-9999px;">Message</label>
-      <input type="text" id="messageInput" placeholder="Type your message…" autocomplete="off" autofocus>
+      <input type="text" id="messageInput" placeholder="Type your message…" autocomplete="off">
       <button type="submit" id="sendBtn">Send</button>
     </form>
   </div>
@@ -142,6 +145,7 @@
 (function () {
   const DEFAULT_BUSINESS_NAME = "a local HVAC company";
 
+  const convoEl = document.querySelector(".convo");
   const messagesEl = document.getElementById("messages");
   const typingEl = document.getElementById("typingIndicator");
   const formEl = document.getElementById("chatForm");
@@ -248,7 +252,11 @@
   businessNameInput.addEventListener("change", resetConversation);
 
   resetConversation();
-  inputEl.focus();
+  // Explicit and deterministic, not reliant on autofocus/focus()'s own
+  // scroll-into-view behavior, which is inconsistent across browsers
+  // (particularly iOS Safari without a prior user gesture).
+  convoEl.scrollIntoView({ block: "start", behavior: "instant" });
+  inputEl.focus({ preventScroll: true });
 })();
 </script>
 
