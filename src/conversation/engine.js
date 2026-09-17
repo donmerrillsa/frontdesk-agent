@@ -37,8 +37,10 @@ const EMERGENCY_SAFETY_LINE = "If you're in any danger, please get to a safe loc
 // sandboxed demo (demo-chat.js, where nothing real happens). Used to avoid
 // the AI claiming real-world actions/follow-through that won't occur.
 function buildEmergencyAcknowledgment(isLiveConversation) {
-  const techLine = isLiveConversation ? " I'm alerting the on-call tech now." : "";
-  return `Thanks — I'm flagging this as urgent. ${EMERGENCY_SAFETY_LINE}${techLine}`;
+  const callbackLine = isLiveConversation
+    ? " I have marked this as an emergency and someone will call you back right away."
+    : "";
+  return `Thanks — I'm flagging this as urgent. ${EMERGENCY_SAFETY_LINE}${callbackLine}`;
 }
 
 /**
