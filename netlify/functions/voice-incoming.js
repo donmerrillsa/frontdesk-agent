@@ -2,7 +2,7 @@
 // netlify/functions/voice-incoming.js
 // ============================================================
 // Twilio calls this (via the number's configured Voice URL) the
-// instant a call hits the Frontdesk number. Conditional forwarding
+// instant a call hits the PiaPhone number. Conditional forwarding
 // upstream means every call that reaches THIS number, by definition,
 // already failed to be answered on the business's real line — there's
 // no separate "did they answer" check needed here. Every call here
@@ -33,9 +33,9 @@ function twiml(sayMessage) {
 
 exports.handler = async (event) => {
   try {
-    const { from: callerNumber, to: frontdeskNumber } = parseTwilioVoiceBody(event.body);
+    const { from: callerNumber, to: piaphoneNumber } = parseTwilioVoiceBody(event.body);
 
-    if (!callerNumber || !frontdeskNumber) {
+    if (!callerNumber || !piaphoneNumber) {
       console.error("voice-incoming: missing From/To in webhook payload");
       return {
         statusCode: 400,
@@ -44,9 +44,9 @@ exports.handler = async (event) => {
       };
     }
 
-    const trial = await db.getTrialByNumber(frontdeskNumber);
+    const trial = await db.getTrialByNumber(piaphoneNumber);
     if (!trial) {
-      console.error(`voice-incoming: no trial found for number ${frontdeskNumber}`);
+      console.error(`voice-incoming: no trial found for number ${piaphoneNumber}`);
       // 200, not 404 — Twilio needs valid TwiML back regardless, or the
       // caller hears dead air / an error tone instead of a clean hangup.
       return {
@@ -57,7 +57,7 @@ exports.handler = async (event) => {
     }
 
     const greeting =
-      `Hi, this is the front desk for ${trial.business_name}. I saw your call come in — how can we help?`;
+      `Hi. This is the help desk at ${trial.business_name}. Sorry we missed your call. How can I help you?`;
 
     // If this caller already has an open conversation (e.g. they called
     // again before finishing a prior one), reuse it instead of starting
@@ -72,7 +72,7 @@ exports.handler = async (event) => {
       });
     }
 
-    await sms.sendSms({ to: callerNumber, body: greeting, from: frontdeskNumber });
+    await sms.sendSms({ to: callerNumber, body: greeting, from: piaphoneNumber });
 
     return {
       statusCode: 200,
