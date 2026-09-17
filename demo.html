@@ -75,11 +75,6 @@
     text-transform:uppercase; letter-spacing:0.03em; background:var(--heat); color:#fff;
   }
 
-  .system-note{
-    align-self:center; max-width:92%; margin:2px auto 4px; padding:8px 14px; border-radius:8px;
-    border:1px dashed var(--hairline); color:var(--slate); font-size:0.85em; text-align:center; line-height:1.4;
-  }
-
   .typing{ font-size:0.85em; color:var(--slate); font-style:italic; padding:0 20px 12px; }
 
   .convo__inputbar{ display:flex; gap:10px; padding:14px 20px; border-top:1px solid var(--hairline); background:var(--paper); }
@@ -113,7 +108,7 @@
 
 <article class="wrap">
   <h1>Try the Live Demo</h1>
-  <p class="intro">A sandboxed chat with the real Frontdesk AI — nothing here is saved or sent to a real business.</p>
+  <p class="intro">This demo shows how Frontdesk texts back a missed call. Try describing a service issue below, like you're the customer. (Nothing here is saved or sent — this is a sandbox.)</p>
 
   <div class="setup">
     <label for="businessNameInput">Business name</label>
@@ -146,7 +141,6 @@
 <script>
 (function () {
   const DEFAULT_BUSINESS_NAME = "a local HVAC company";
-  const OPENING_NOTE = "Hi — this demo shows how Frontdesk texts back a missed call. Try describing a service issue below, like you're the customer. (Nothing here is saved or sent — this is a sandbox.)";
 
   const messagesEl = document.getElementById("messages");
   const typingEl = document.getElementById("typingIndicator");
@@ -191,21 +185,11 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  function addSystemNote(text) {
-    const note = document.createElement("div");
-    note.className = "system-note";
-    note.textContent = text;
-    messagesEl.appendChild(note);
-  }
-
   function resetConversation() {
     history = [];
     capturedFields = {};
     emergency = false;
     messagesEl.innerHTML = "";
-    // Framing only — not pushed into history, so it's never sent to
-    // demo-chat.js or seen by the model as something it said.
-    addSystemNote(OPENING_NOTE);
     const opening = greeting();
     addBubble("assistant", opening);
     history.push({ role: "assistant", text: opening });
