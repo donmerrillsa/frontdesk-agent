@@ -2,10 +2,10 @@
 // netlify/functions/sms-incoming.js
 // ============================================================
 // This is what Twilio calls (via TWILIO_SMS_WEBHOOK_URL on the
-// provisioned number) every time a caller texts the Frontdesk
+// provisioned number) every time a caller texts the PiaPhone
 // number — including their very first reply after the missed-call
 // text-back. Twilio sends this as application/x-www-form-urlencoded,
-// not JSON, with the caller's number in "From" and the Frontdesk
+// not JSON, with the caller's number in "From" and the PiaPhone
 // number in "To".
 //
 // NEEDS real PROVIDER_MODE=live + Twilio credentials to actually
@@ -30,16 +30,16 @@ function parseTwilioBody(rawBody) {
 
 exports.handler = async (event) => {
   try {
-    const { from: callerNumber, to: frontdeskNumber, body: message } = parseTwilioBody(event.body);
+    const { from: callerNumber, to: piaphoneNumber, body: message } = parseTwilioBody(event.body);
 
-    if (!callerNumber || !frontdeskNumber || !message) {
+    if (!callerNumber || !piaphoneNumber || !message) {
       console.error("sms-incoming: missing From/To/Body in webhook payload");
       return { statusCode: 400, body: "Missing required Twilio fields" };
     }
 
-    const trial = await db.getTrialByNumber(frontdeskNumber);
+    const trial = await db.getTrialByNumber(piaphoneNumber);
     if (!trial) {
-      console.error(`sms-incoming: no trial found for number ${frontdeskNumber}`);
+      console.error(`sms-incoming: no trial found for number ${piaphoneNumber}`);
       return { statusCode: 404, body: "No trial associated with this number" };
     }
 
@@ -100,7 +100,7 @@ exports.handler = async (event) => {
     });
 
     // Reply to the caller.
-    await sms.sendSms({ to: callerNumber, body: result.reply, from: frontdeskNumber });
+    await sms.sendSms({ to: callerNumber, body: result.reply, from: piaphoneNumber });
 
     // Owner alerting for engine failures — throttled to one alert per
     // trial per 30-minute window so a run of failures doesn't spam the
@@ -110,8 +110,8 @@ exports.handler = async (event) => {
       const ALERT_THROTTLE_MS = 30 * 60 * 1000;
       const lastAlertAt = trial.last_error_alert_at ? new Date(trial.last_error_alert_at).getTime() : 0;
       if (Date.now() - lastAlertAt >= ALERT_THROTTLE_MS) {
-        const ownerAlert = `Frontdesk error: ${trial.business_name} — a conversation failed, please check logs.`;
-        await sms.sendSms({ to: trial.mobile_number, body: ownerAlert, from: frontdeskNumber });
+        const ownerAlert = `PiaPhone error: ${trial.business_name} — a conversation failed, please check logs.`;
+        await sms.sendSms({ to: trial.mobile_number, body: ownerAlert, from: piaphoneNumber });
         await db.updateTrial(trial.id, { last_error_alert_at: new Date().toISOString() });
       }
     }
@@ -124,9 +124,9 @@ exports.handler = async (event) => {
         `Caller: ${callerNumber}. Address: ${result.capturedFields.address || "not yet provided"}. ` +
         `Urgency: ${result.capturedFields.urgency || "unspecified"}. Check your lead log for details.`;
 
-      await sms.sendSms({ to: trial.mobile_number, body: alertMessage, from: frontdeskNumber });
+      await sms.sendSms({ to: trial.mobile_number, body: alertMessage, from: piaphoneNumber });
       if (trial.backup_number) {
-        await sms.sendSms({ to: trial.backup_number, body: alertMessage, from: frontdeskNumber });
+        await sms.sendSms({ to: trial.backup_number, body: alertMessage, from: piaphoneNumber });
       }
     }
 
